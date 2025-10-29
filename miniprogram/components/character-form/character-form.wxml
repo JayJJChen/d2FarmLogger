@@ -1,0 +1,65 @@
+<view class="modal-overlay" wx:if="{{visible}}" bindtap="onOverlayTap">
+  <view class="modal-content" catchtap="onContentTap">
+    <view class="modal-header">
+      <text class="modal-title">{{editMode ? '编辑人物' : '新建人物'}}</text>
+    </view>
+
+    <view class="modal-body">
+      <view class="form-item">
+        <text class="form-label">人物名称 *</text>
+        <input
+          class="form-input"
+          placeholder="请输入人物名称"
+          value="{{formData.name}}"
+          bindinput="onNameInput"
+          maxlength="20"
+        />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">职业</text>
+        <picker
+          mode="selector"
+          range="{{classOptions}}"
+          range-key="label"
+          value="{{selectedClassIndex}}"
+          bindchange="onClassSelect"
+        >
+          <view class="picker-view">
+            <text class="picker-text">{{formData.class}}</text>
+            <text class="picker-arrow">v</text>
+          </view>
+        </picker>
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">等级 (1-99)</text>
+        <input
+          class="form-input"
+          placeholder="可选"
+          value="{{formData.level}}"
+          bindinput="onLevelInput"
+          type="number"
+        />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">MF值</text>
+        <input
+          class="form-input"
+          placeholder="可选"
+          value="{{formData.magicFind}}"
+          bindinput="onMagicFindInput"
+          type="number"
+        />
+      </view>
+    </view>
+
+    <view class="modal-footer">
+      <button class="btn btn-cancel" bindtap="onCancel">取消</button>
+      <button class="btn btn-submit" bindtap="onSubmit">
+        {{editMode ? '保存' : '创建'}}
+      </button>
+    </view>
+  </view>
+</view>

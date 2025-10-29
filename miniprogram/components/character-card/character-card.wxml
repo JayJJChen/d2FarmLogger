@@ -1,0 +1,11 @@
+<view class="character-card">
+  <view class="character-info">
+    <text class="character-name">{{displayInfo}}</text>
+  </view>
+  <view class="character-actions">
+    <button class="action-btn edit-btn" bindtap="onEditTap">编辑</button>
+    <button class="action-btn config-btn" bindtap="onConfigTap">配置</button>
+    <button class="action-btn delete-btn" bindtap="onDeleteTap">删除</button>
+    <button class="action-btn start-btn" bindtap="onStartSessionTap">开始</button>
+  </view>
+</view>

@@ -1,3 +1,7 @@
 {
-  "navigationBarTitleText": "人物"
+  "navigationBarTitleText": "人物",
+  "usingComponents": {
+    "character-card": "../../components/character-card/character-card",
+    "character-form": "../../components/character-form/character-form"
+  }
 }
