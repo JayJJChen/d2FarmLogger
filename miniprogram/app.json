@@ -1,10 +1,35 @@
 {
   "pages": [
+    "pages/characters/characters",
+    "pages/sessions/session",
+    "pages/statistics/statistics",
+    "pages/configuration/configuration",
+    "pages/select-item/select-item",
     "pages/index/index"
   ],
   "window": {
-    "navigationBarTitleText": "小程序",
+    "navigationBarTitleText": "D2 Farm Logger",
     "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#666666",
+    "selectedColor": "#D4AF37",
+    "backgroundColor": "#1a1a1a",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/characters/characters",
+        "text": "人物"
+      },
+      {
+        "pagePath": "pages/statistics/statistics",
+        "text": "统计"
+      },
+      {
+        "pagePath": "pages/configuration/configuration",
+        "text": "配置"
+      }
+    ]
   },
   "style": "v2"
 }
