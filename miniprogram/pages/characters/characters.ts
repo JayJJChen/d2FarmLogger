@@ -64,7 +64,7 @@ Page({
     const { character } = e.detail
     wx.showModal({
       title: '配置场景',
-      content: character.name + ' 还没有配置默认场景列表，请先去配置页面设置场景流程。',
+      content: character.name + ' 还没有配置默认场景列表，请先去设置页面设置MF路线。',
       showCancel: true,
       cancelText: '取消',
       confirmText: '去配置',

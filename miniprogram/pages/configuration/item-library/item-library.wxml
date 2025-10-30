@@ -1,0 +1,93 @@
+<view class="item-library-container">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">物品管理</text>
+    <text class="page-subtitle">管理物品词库（用户自建）</text>
+  </view>
+
+  <!-- 分类标签 -->
+  <view class="category-tabs">
+    <view
+      wx:for="{{categories}}"
+      wx:key="key"
+      class="category-tab {{currentCategory === item.key ? 'active' : ''}}"
+      bindtap="switchCategory"
+      data-category="{{item.key}}"
+      style="border: 2rpx solid {{item.color}}; color: {{currentCategory === item.key ? 'white' : item.color}}; background: {{currentCategory === item.key ? item.color : 'white'}}"
+    >
+      <text class="tab-text">{{item.name}}</text>
+      <text class="tab-count">({{item.count}})</text>
+    </view>
+  </view>
+
+  <!-- 搜索和操作栏 -->
+  <view class="action-bar">
+    <view class="search-box">
+      <input
+        class="search-input"
+        placeholder="搜索物品名称..."
+        value="{{searchKeyword}}"
+        bindinput="onSearchInput"
+        confirm-type="search"
+        bindconfirm="onSearchConfirm"
+      />
+      <view class="search-icon">🔍</view>
+    </view>
+    <view class="sort-btn" bindtap="toggleSortOrder">
+      <text class="sort-text">{{sortOrder === 'usage' ? '按使用频率' : '按时间排序'}}</text>
+      <text class="sort-icon">{{sortOrder === 'usage' ? '↓' : '↑'}}</text>
+    </view>
+  </view>
+
+  <!-- 物品列表 -->
+  <view class="item-list">
+    <view
+      wx:for="{{filteredItems}}"
+      wx:key="id"
+      class="item-item"
+      data-index="{{index}}"
+    >
+      <!-- 物品内容 -->
+      <view class="item-content">
+        <view class="item-info">
+          <view class="item-header">
+            <text class="item-name" style="color: {{item.category.color}}">{{item.name}}</text>
+            <view class="item-category-badge" style="background: {{item.category.color}}20; color: {{item.category.color}}">
+              {{item.category.name}}
+            </view>
+          </view>
+          <view class="item-meta">
+            <text class="usage-count">使用 {{item.usageCount}} 次</text>
+            <text class="meta-divider">•</text>
+            <text class="time-text">{{item.createTimeText}}</text>
+          </view>
+        </view>
+        <view class="item-actions">
+          <view class="action-btn merge" catchtap="mergeItem" data-item="{{item}}">
+            <text class="btn-text">整理</text>
+          </view>
+          <view class="action-btn edit" catchtap="editItem" data-item="{{item}}">
+            <text class="btn-text">编辑</text>
+          </view>
+          <view class="action-btn delete" catchtap="deleteItem" data-item="{{item}}">
+            <text class="btn-text">删除</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:if="{{filteredItems.length === 0}}" class="empty-state">
+    <text class="empty-text">{{searchKeyword ? '没有找到匹配的物品' : '该分类暂无物品'}}</text>
+    <text class="empty-tip">{{searchKeyword ? '尝试其他搜索关键词' : '在刷怪时会自动创建物品词库'}}</text>
+  </view>
+
+  <!-- 统计信息 -->
+  <view class="stats-bar">
+    <text class="stats-text">共 {{totalItems}} 个物品</text>
+    <view class="merge-all-btn" bindtap="showMergeAllDialog">
+      <text class="merge-text">批量整理</text>
+    </view>
+  </view>
+</view>

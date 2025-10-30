@@ -1,3 +1,54 @@
-<view class="container">
-  <text class="page-title">配置页面</text>
+<view class="configuration-container">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">设置</text>
+  </view>
+
+  <!-- 功能列表 -->
+  <view class="function-list">
+    <!-- MF路线管理 -->
+    <view class="function-card" bindtap="navigateToSceneFlows">
+      <view class="card-header">
+        <view class="card-icon">📋</view>
+        <view class="card-info">
+          <text class="card-title">MF路线管理</text>
+          <text class="card-desc">管理可复用的MF路线</text>
+        </view>
+        <view class="card-arrow">›</view>
+      </view>
+      <view class="card-footer">
+        <text class="card-count">{{sceneFlowsCount}} 个路线</text>
+      </view>
+    </view>
+
+    <!-- 场景管理 -->
+    <view class="function-card" bindtap="navigateToSceneLibrary">
+      <view class="card-header">
+        <view class="card-icon">🗺️</view>
+        <view class="card-info">
+          <text class="card-title">场景管理</text>
+          <text class="card-desc">管理所有场景，用于组合成MF路线</text>
+        </view>
+        <view class="card-arrow">›</view>
+      </view>
+      <view class="card-footer">
+        <text class="card-count">{{scenesCount}} 个场景</text>
+      </view>
+    </view>
+
+    <!-- 物品管理 -->
+    <view class="function-card" bindtap="navigateToItemLibrary">
+      <view class="card-header">
+        <view class="card-icon">⚔️</view>
+        <view class="card-info">
+          <text class="card-title">物品管理</text>
+          <text class="card-desc">管理物品词库（用户自建）</text>
+        </view>
+        <view class="card-arrow">›</view>
+      </view>
+      <view class="card-footer">
+        <text class="card-count">{{itemsCount}} 个物品</text>
+      </view>
+    </view>
+  </view>
 </view>

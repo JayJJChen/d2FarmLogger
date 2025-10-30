@@ -1,0 +1,432 @@
+.scene-library-container {
+  min-height: 100vh;
+  background: #f8f9fa;
+  padding-bottom: 140rpx;
+  box-sizing: border-box;
+}
+
+.page-header {
+  background: white;
+  padding: 32rpx 24rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  .page-title {
+    font-size: 36rpx;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    display: block;
+    margin-bottom: 8rpx;
+  }
+
+  .page-subtitle {
+    font-size: 26rpx;
+    color: #666;
+    text-align: center;
+    display: block;
+  }
+}
+
+.category-tabs {
+  background: white;
+  padding: 20rpx 24rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  display: flex;
+  gap: 24rpx;
+  overflow-x: auto;
+  position: sticky;
+  top: 120rpx;
+  z-index: 40;
+
+  .category-tab {
+    display: flex;
+    align-items: center;
+    padding: 12rpx 20rpx;
+    border-radius: 24rpx;
+    background: #f8f9fa;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+
+    &.active {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .tab-text {
+      font-size: 26rpx;
+      font-weight: 500;
+    }
+
+    .tab-count {
+      font-size: 20rpx;
+      margin-left: 4rpx;
+      opacity: 0.8;
+    }
+  }
+}
+
+.scene-list {
+  padding: 16rpx 0;
+}
+
+.scene-item {
+  margin-bottom: 16rpx;
+
+  .scene-content {
+    background: white;
+    margin: 0 24rpx;
+    border-radius: 16rpx;
+    padding: 24rpx;
+    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+  }
+
+  .scene-info {
+    flex: 1;
+
+    .scene-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12rpx;
+
+      .scene-name {
+        font-size: 32rpx;
+        font-weight: 600;
+        color: #333;
+        margin-right: 12rpx;
+      }
+
+      .scene-badge {
+        font-size: 20rpx;
+        padding: 4rpx 12rpx;
+        border-radius: 20rpx;
+        color: white;
+
+        &.builtin {
+          background: #4CAF50;
+        }
+
+        &.custom {
+          background: #FF9800;
+        }
+      }
+    }
+
+    .scene-description {
+      margin-bottom: 8rpx;
+
+      .desc-text {
+        font-size: 26rpx;
+        color: #666;
+        line-height: 1.4;
+        display: block;
+      }
+    }
+
+    .scene-meta {
+      display: flex;
+      align-items: center;
+      gap: 8rpx;
+
+      .meta-text {
+        font-size: 20rpx;
+        color: #999;
+      }
+
+      .meta-divider {
+        font-size: 20rpx;
+        color: #ddd;
+      }
+    }
+  }
+
+  .scene-actions {
+    margin-left: 16rpx;
+    display: flex;
+    flex-direction: column;
+    gap: 8rpx;
+
+    .action-btn {
+      padding: 12rpx 20rpx;
+      border-radius: 8rpx;
+      font-size: 24rpx;
+      color: white;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      text-align: center;
+      min-width: 80rpx;
+
+      &.edit {
+        background: #3498db;
+      }
+
+      &.delete {
+        background: #ff4757;
+      }
+
+      &:active {
+        opacity: 0.8;
+      }
+
+      .btn-text {
+        font-size: 24rpx;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 40rpx;
+  text-align: center;
+
+  .empty-text {
+    font-size: 32rpx;
+    color: #999;
+    margin-bottom: 16rpx;
+  }
+
+  .empty-tip {
+    font-size: 26rpx;
+    color: #ccc;
+    line-height: 1.4;
+  }
+}
+
+.add-button {
+  position: fixed;
+  bottom: 40rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #4CAF50;
+  color: white;
+  border-radius: 50rpx;
+  padding: 24rpx 48rpx;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  box-shadow: 0 8rpx 24rpx rgba(76, 175, 80, 0.3);
+  z-index: 100;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &:active {
+    transform: translateX(-50%) scale(0.95);
+    box-shadow: 0 4rpx 12rpx rgba(76, 175, 80, 0.3);
+  }
+
+  .add-icon {
+    font-size: 36rpx;
+    font-weight: 300;
+    line-height: 1;
+  }
+
+  .add-text {
+    font-size: 28rpx;
+    font-weight: 500;
+  }
+}
+
+/* 小屏幕适配 */
+@media (max-width: 750rpx) {
+  .page-header {
+    padding: 24rpx 20rpx;
+
+    .page-title {
+      font-size: 32rpx;
+    }
+
+    .page-subtitle {
+      font-size: 24rpx;
+    }
+  }
+
+  .category-tabs {
+    padding: 16rpx 20rpx;
+    gap: 16rpx;
+
+    .category-tab {
+      padding: 10rpx 16rpx;
+
+      .tab-text {
+        font-size: 24rpx;
+      }
+
+      .tab-count {
+        font-size: 18rpx;
+      }
+    }
+  }
+
+  .scene-list {
+    padding: 12rpx 0;
+  }
+
+  .scene-item {
+    .scene-content {
+      margin: 0 20rpx;
+      padding: 20rpx;
+
+      .scene-info {
+        .scene-header {
+          .scene-name {
+            font-size: 30rpx;
+          }
+
+          .scene-badge {
+            font-size: 18rpx;
+            padding: 3rpx 10rpx;
+          }
+        }
+
+        .scene-description {
+          .desc-text {
+            font-size: 24rpx;
+          }
+        }
+
+        .scene-meta {
+          .meta-text {
+            font-size: 18rpx;
+          }
+
+          .meta-divider {
+            font-size: 18rpx;
+          }
+        }
+      }
+
+      .scene-actions {
+        .action-btn {
+          padding: 10rpx 16rpx;
+          font-size: 22rpx;
+          min-width: 70rpx;
+        }
+      }
+    }
+  }
+
+  .add-button {
+    bottom: 30rpx;
+    padding: 20rpx 40rpx;
+
+    .add-icon {
+      font-size: 32rpx;
+    }
+
+    .add-text {
+      font-size: 26rpx;
+    }
+  }
+}
+
+/* 超小屏幕适配 */
+@media (max-width: 600rpx) {
+  .page-header {
+    padding: 20rpx 16rpx;
+
+    .page-title {
+      font-size: 30rpx;
+    }
+
+    .page-subtitle {
+      font-size: 22rpx;
+    }
+  }
+
+  .category-tabs {
+    padding: 12rpx 16rpx;
+    gap: 12rpx;
+
+    .category-tab {
+      padding: 8rpx 12rpx;
+
+      .tab-text {
+        font-size: 22rpx;
+      }
+
+      .tab-count {
+        font-size: 16rpx;
+      }
+    }
+  }
+
+  .scene-list {
+    padding: 8rpx 0;
+  }
+
+  .scene-item {
+    margin-bottom: 12rpx;
+
+    .scene-content {
+      margin: 0 16rpx;
+      padding: 16rpx;
+
+      .scene-info {
+        .scene-header {
+          .scene-name {
+            font-size: 28rpx;
+          }
+
+          .scene-badge {
+            font-size: 16rpx;
+            padding: 2rpx 8rpx;
+          }
+        }
+
+        .scene-description {
+          .desc-text {
+            font-size: 22rpx;
+          }
+        }
+
+        .scene-meta {
+          .meta-text {
+            font-size: 16rpx;
+          }
+
+          .meta-divider {
+            font-size: 16rpx;
+          }
+        }
+      }
+
+      .scene-actions {
+        margin-left: 12rpx;
+
+        .action-btn {
+          padding: 8rpx 12rpx;
+          font-size: 20rpx;
+          min-width: 60rpx;
+        }
+      }
+    }
+  }
+
+  .add-button {
+    bottom: 20rpx;
+    padding: 18rpx 36rpx;
+
+    .add-icon {
+      font-size: 30rpx;
+    }
+
+    .add-text {
+      font-size: 24rpx;
+    }
+  }
+}

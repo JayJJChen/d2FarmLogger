@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var character_1 = require("../../models/character");
+const character_1 = require("../../models/character");
 Component({
     properties: {
         visible: {
@@ -16,7 +16,7 @@ Component({
             value: null,
             observer: function (newVal) {
                 if (newVal && this.data.editMode) {
-                    var classIndex = this.data.classOptions.findIndex(function (option) { return option.value === newVal.class; });
+                    const classIndex = this.data.classOptions.findIndex(option => option.value === newVal.class);
                     this.setData({
                         formData: {
                             name: newVal.name || '',
@@ -49,30 +49,30 @@ Component({
         selectedClassIndex: 0
     },
     methods: {
-        onNameInput: function (e) {
+        onNameInput(e) {
             this.setData({
                 'formData.name': e.detail.value
             });
         },
-        onClassSelect: function (e) {
-            var selectedIndex = e.detail.value;
-            var selectedClass = this.data.classOptions[selectedIndex].value;
+        onClassSelect(e) {
+            const selectedIndex = e.detail.value;
+            const selectedClass = this.data.classOptions[selectedIndex].value;
             this.setData({
                 'formData.class': selectedClass,
                 selectedClassIndex: selectedIndex
             });
         },
-        onLevelInput: function (e) {
+        onLevelInput(e) {
             this.setData({
                 'formData.level': e.detail.value
             });
         },
-        onMagicFindInput: function (e) {
+        onMagicFindInput(e) {
             this.setData({
                 'formData.magicFind': e.detail.value
             });
         },
-        validateForm: function () {
+        validateForm() {
             var formData = this.data.formData;
             // 验证名称
             if (!formData.name || !formData.name.trim()) {
@@ -93,7 +93,7 @@ Component({
             }
             return { isValid: true };
         },
-        onSubmit: function () {
+        onSubmit() {
             var validation = this.validateForm();
             if (!validation.isValid) {
                 wx.showToast({
@@ -136,16 +136,16 @@ Component({
                 });
             }
         },
-        onOverlayTap: function () {
+        onOverlayTap() {
             this.triggerEvent('cancel');
         },
-        onContentTap: function () {
+        onContentTap() {
             // 阻止事件冒泡，防止modal被意外关闭
         },
-        onCancel: function () {
+        onCancel() {
             this.triggerEvent('cancel');
         },
-        resetForm: function () {
+        resetForm() {
             this.setData({
                 formData: {
                     name: '',
@@ -158,7 +158,7 @@ Component({
         }
     },
     lifetimes: {
-        attached: function () {
+        attached() {
             if (!this.data.editMode) {
                 this.resetForm();
             }

@@ -1,0 +1,356 @@
+.scene-flows-container {
+  min-height: 100vh;
+  background: #f8f9fa;
+  padding-bottom: 140rpx;
+  box-sizing: border-box;
+}
+
+.page-header {
+  background: white;
+  padding: 32rpx 24rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  .page-title {
+    font-size: 36rpx;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    display: block;
+    margin-bottom: 8rpx;
+  }
+
+  .page-subtitle {
+    font-size: 26rpx;
+    color: #666;
+    text-align: center;
+    display: block;
+  }
+}
+
+.scene-flows-list {
+  padding: 16rpx 0;
+}
+
+.scene-flow-item {
+  margin-bottom: 16rpx;
+
+  .flow-content {
+    background: white;
+    margin: 0 24rpx;
+    border-radius: 16rpx;
+    padding: 24rpx;
+    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+  }
+
+  .flow-info {
+    flex: 1;
+
+    .flow-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12rpx;
+
+      .flow-name {
+        font-size: 32rpx;
+        font-weight: 600;
+        color: #333;
+        margin-right: 12rpx;
+      }
+
+      .flow-badge {
+        font-size: 20rpx;
+        padding: 4rpx 12rpx;
+        border-radius: 20rpx;
+        color: white;
+
+        &.builtin {
+          background: #4CAF50;
+        }
+
+        &.custom {
+          background: #FF9800;
+        }
+      }
+    }
+
+    .flow-scenes {
+      margin-bottom: 8rpx;
+
+      .scenes-text {
+        font-size: 26rpx;
+        color: #333;
+        display: block;
+        margin-bottom: 4rpx;
+        line-height: 1.4;
+      }
+
+      .scenes-count {
+        font-size: 22rpx;
+        color: #666;
+        display: block;
+      }
+    }
+
+    .flow-time {
+      .time-text {
+        font-size: 20rpx;
+        color: #999;
+        display: block;
+      }
+    }
+  }
+
+  .flow-actions {
+    margin-left: 16rpx;
+    display: flex;
+    flex-direction: column;
+    gap: 8rpx;
+
+    .action-btn {
+      padding: 12rpx 20rpx;
+      border-radius: 8rpx;
+      font-size: 24rpx;
+      color: white;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      text-align: center;
+      min-width: 80rpx;
+
+      &.edit {
+        background: #3498db;
+      }
+
+      &.delete {
+        background: #ff4757;
+      }
+
+      &:active {
+        opacity: 0.8;
+      }
+
+      .btn-text {
+        font-size: 24rpx;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 40rpx;
+  text-align: center;
+
+  .empty-text {
+    font-size: 32rpx;
+    color: #999;
+    margin-bottom: 16rpx;
+  }
+
+  .empty-tip {
+    font-size: 26rpx;
+    color: #ccc;
+    line-height: 1.4;
+  }
+}
+
+.add-button {
+  position: fixed;
+  bottom: 40rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #4CAF50;
+  color: white;
+  border-radius: 50rpx;
+  padding: 24rpx 48rpx;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  box-shadow: 0 8rpx 24rpx rgba(76, 175, 80, 0.3);
+  z-index: 100;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &:active {
+    transform: translateX(-50%) scale(0.95);
+    box-shadow: 0 4rpx 12rpx rgba(76, 175, 80, 0.3);
+  }
+
+  .add-icon {
+    font-size: 36rpx;
+    font-weight: 300;
+    line-height: 1;
+  }
+
+  .add-text {
+    font-size: 28rpx;
+    font-weight: 500;
+  }
+}
+
+/* 小屏幕适配 */
+@media (max-width: 750rpx) {
+  .page-header {
+    padding: 24rpx 20rpx;
+
+    .page-title {
+      font-size: 32rpx;
+    }
+
+    .page-subtitle {
+      font-size: 24rpx;
+    }
+  }
+
+  .scene-flows-list {
+    padding: 12rpx 0;
+  }
+
+  .scene-flow-item {
+    .flow-content {
+      margin: 0 20rpx;
+      padding: 20rpx;
+
+      .flow-info {
+        .flow-header {
+          .flow-name {
+            font-size: 30rpx;
+          }
+
+          .flow-badge {
+            font-size: 18rpx;
+            padding: 3rpx 10rpx;
+          }
+        }
+
+        .flow-scenes {
+          .scenes-text {
+            font-size: 24rpx;
+          }
+
+          .scenes-count {
+            font-size: 20rpx;
+          }
+        }
+
+        .flow-time {
+          .time-text {
+            font-size: 18rpx;
+          }
+        }
+      }
+
+      .flow-actions {
+        .action-btn {
+          padding: 10rpx 16rpx;
+          font-size: 22rpx;
+          min-width: 70rpx;
+        }
+      }
+    }
+  }
+
+  .add-button {
+    bottom: 30rpx;
+    padding: 20rpx 40rpx;
+
+    .add-icon {
+      font-size: 32rpx;
+    }
+
+    .add-text {
+      font-size: 26rpx;
+    }
+  }
+}
+
+/* 超小屏幕适配 */
+@media (max-width: 600rpx) {
+  .page-header {
+    padding: 20rpx 16rpx;
+
+    .page-title {
+      font-size: 30rpx;
+    }
+
+    .page-subtitle {
+      font-size: 22rpx;
+    }
+  }
+
+  .scene-flows-list {
+    padding: 8rpx 0;
+  }
+
+  .scene-flow-item {
+    margin-bottom: 12rpx;
+
+    .flow-content {
+      margin: 0 16rpx;
+      padding: 16rpx;
+
+      .flow-info {
+        .flow-header {
+          .flow-name {
+            font-size: 28rpx;
+          }
+
+          .flow-badge {
+            font-size: 16rpx;
+            padding: 2rpx 8rpx;
+          }
+        }
+
+        .flow-scenes {
+          .scenes-text {
+            font-size: 22rpx;
+          }
+
+          .scenes-count {
+            font-size: 18rpx;
+          }
+        }
+
+        .flow-time {
+          .time-text {
+            font-size: 16rpx;
+          }
+        }
+      }
+
+      .flow-actions {
+        margin-left: 12rpx;
+
+        .action-btn {
+          padding: 8rpx 12rpx;
+          font-size: 20rpx;
+          min-width: 60rpx;
+        }
+      }
+    }
+  }
+
+  .add-button {
+    bottom: 20rpx;
+    padding: 18rpx 36rpx;
+
+    .add-icon {
+      font-size: 30rpx;
+    }
+
+    .add-text {
+      font-size: 24rpx;
+    }
+  }
+}

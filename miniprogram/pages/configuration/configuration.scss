@@ -1,14 +1,185 @@
-.container {
-  padding: 20rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
+.configuration-container {
+  min-height: 100vh;
+  background: #f8f9fa;
+  box-sizing: border-box;
 }
 
-.page-title {
-  font-size: 36rpx;
-  font-weight: bold;
-  color: #333;
+.page-header {
+  background: white;
+  padding: 32rpx 24rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  .page-title {
+    font-size: 36rpx;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+  }
+}
+
+.function-list {
+  padding: 24rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.function-card {
+  background: white;
+  border-radius: 16rpx;
+  padding: 32rpx 24rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &:active {
+    transform: scale(0.98);
+    box-shadow: 0 1rpx 8rpx rgba(0, 0, 0, 0.1);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16rpx;
+
+    .card-icon {
+      font-size: 48rpx;
+      margin-right: 20rpx;
+      width: 80rpx;
+      height: 80rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8f9fa;
+      border-radius: 16rpx;
+    }
+
+    .card-info {
+      flex: 1;
+
+      .card-title {
+        font-size: 32rpx;
+        font-weight: 600;
+        color: #333;
+        display: block;
+        margin-bottom: 8rpx;
+      }
+
+      .card-desc {
+        font-size: 26rpx;
+        color: #666;
+        display: block;
+        line-height: 1.3;
+      }
+    }
+
+    .card-arrow {
+      font-size: 48rpx;
+      color: #ccc;
+      font-weight: 300;
+      margin-left: 16rpx;
+    }
+  }
+
+  .card-footer {
+    border-top: 1rpx solid #f5f5f5;
+    padding-top: 16rpx;
+    margin-top: 8rpx;
+
+    .card-count {
+      font-size: 24rpx;
+      color: #999;
+    }
+  }
+}
+
+/* 小屏幕适配 */
+@media (max-width: 750rpx) {
+  .page-header {
+    padding: 24rpx 20rpx;
+
+    .page-title {
+      font-size: 32rpx;
+    }
+  }
+
+  .function-list {
+    padding: 20rpx;
+    gap: 20rpx;
+  }
+
+  .function-card {
+    padding: 28rpx 20rpx;
+
+    .card-header {
+      .card-icon {
+        font-size: 44rpx;
+        width: 72rpx;
+        height: 72rpx;
+        margin-right: 16rpx;
+      }
+
+      .card-info {
+        .card-title {
+          font-size: 30rpx;
+        }
+
+        .card-desc {
+          font-size: 24rpx;
+        }
+      }
+
+      .card-arrow {
+        font-size: 44rpx;
+      }
+    }
+  }
+}
+
+/* 超小屏幕适配 */
+@media (max-width: 600rpx) {
+  .page-header {
+    padding: 20rpx 16rpx;
+
+    .page-title {
+      font-size: 30rpx;
+    }
+  }
+
+  .function-list {
+    padding: 16rpx;
+    gap: 16rpx;
+  }
+
+  .function-card {
+    padding: 24rpx 16rpx;
+
+    .card-header {
+      .card-icon {
+        font-size: 40rpx;
+        width: 64rpx;
+        height: 64rpx;
+        margin-right: 12rpx;
+      }
+
+      .card-info {
+        .card-title {
+          font-size: 28rpx;
+        }
+
+        .card-desc {
+          font-size: 22rpx;
+        }
+      }
+
+      .card-arrow {
+        font-size: 40rpx;
+      }
+    }
+  }
 }

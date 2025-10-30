@@ -1,7 +1,7 @@
 // index.ts
 Page({
     data: {},
-    onLoad: function () {
+    onLoad() {
         // 页面加载时执行
     }
 });

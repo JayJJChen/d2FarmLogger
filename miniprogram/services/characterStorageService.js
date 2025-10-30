@@ -3,7 +3,7 @@
 // 提供角色数据的本地存储CRUD操作
 // 确保ES5兼容性
 Object.defineProperty(exports, "__esModule", { value: true });
-var character_1 = require("../models/character");
+const character_1 = require("../models/character");
 var StorageUtils = require('../utils/storageUtils');
 // 存储键值常量
 var STORAGE_KEYS = {
