@@ -1,3 +1,5 @@
+import { ItemStorageService } from '../../services/itemStorageService'
+
 interface ConfigurationData {
   sceneFlowsCount: number
   scenesCount: number
@@ -8,7 +10,7 @@ Page({
   data: {
     sceneFlowsCount: 2,
     scenesCount: 8,
-    itemsCount: 15
+    itemsCount: 0
   } as ConfigurationData,
 
   onLoad() {
@@ -19,12 +21,13 @@ Page({
    * 加载配置数据统计
    */
   loadConfigurationData() {
-    // TODO: 实际从存储服务获取数据
-    // 这里使用Mock数据
+    // 获取真实的物品数量（包括内置物品和用户物品）
+    const allItems = ItemStorageService.getAllItems()
+
     this.setData({
-      sceneFlowsCount: 2,
-      scenesCount: 8,
-      itemsCount: 15
+      sceneFlowsCount: 2,  // TODO: 从实际存储服务获取
+      scenesCount: 8,     // TODO: 从实际存储服务获取
+      itemsCount: allItems.length
     })
   },
 

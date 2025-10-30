@@ -1,0 +1,65 @@
+<!-- 遮罩层 -->
+<view class="item-form-mask" wx:if="{{visible}}" bindtap="onMaskTap">
+  <!-- 内容区域 -->
+  <view class="item-form-content" catchtap="onContentTap">
+    <!-- 标题栏 -->
+    <view class="form-header">
+      <text class="form-title">{{getTitleText()}}</text>
+      <view class="close-btn" bindtap="onCancel">×</view>
+    </view>
+
+    <!-- 表单内容 -->
+    <view class="form-body">
+      <!-- 物品名称输入 -->
+      <view class="form-section">
+        <text class="section-title">物品名称</text>
+        <input
+          class="form-input"
+          placeholder="请输入物品名称"
+          value="{{itemName}}"
+          bindinput="onNameInput"
+          maxlength="20"
+        />
+      </view>
+
+      <!-- 分类选择 -->
+      <view class="form-section">
+        <text class="section-title">物品类别</text>
+        <view class="category-list">
+          <view
+            wx:for="{{categories}}"
+            wx:key="key"
+            class="category-item {{selectedCategory && selectedCategory.key === item.key ? 'selected' : ''}}"
+            bindtap="onCategoryTap"
+            data-category="{{item}}"
+            style="border-color: {{item.color}}; color: {{selectedCategory && selectedCategory.key === item.key ? 'white' : item.color}}; background: {{selectedCategory && selectedCategory.key === item.key ? item.color : 'white'}}"
+          >
+            <text class="category-name">{{item.name}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 备注输入（仅session模式） -->
+      <view class="form-section" wx:if="{{mode === 'session'}}">
+        <text class="section-title">备注</text>
+        <textarea
+          class="form-textarea"
+          placeholder="添加备注信息（可选）"
+          value="{{itemNote}}"
+          bindinput="onNoteInput"
+          maxlength="100"
+        />
+      </view>
+    </view>
+
+    <!-- 按钮栏 -->
+    <view class="form-footer">
+      <view class="form-btn cancel" bindtap="onCancel">
+        <text class="btn-text">取消</text>
+      </view>
+      <view class="form-btn confirm" bindtap="onConfirm">
+        <text class="btn-text">{{getConfirmButtonText()}}</text>
+      </view>
+    </view>
+  </view>
+</view>

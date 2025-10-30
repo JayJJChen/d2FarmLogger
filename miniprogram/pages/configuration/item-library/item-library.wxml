@@ -2,7 +2,7 @@
   <!-- 页面标题 -->
   <view class="page-header">
     <text class="page-title">物品管理</text>
-    <text class="page-subtitle">管理物品词库（用户自建）</text>
+    <text class="page-subtitle">管理物品词库，包含内置物品和用户自建物品</text>
   </view>
 
   <!-- 分类标签 -->
@@ -62,10 +62,7 @@
             <text class="time-text">{{item.createTimeText}}</text>
           </view>
         </view>
-        <view class="item-actions">
-          <view class="action-btn merge" catchtap="mergeItem" data-item="{{item}}">
-            <text class="btn-text">整理</text>
-          </view>
+        <view class="item-actions" wx:if="{{!item.isBuiltIn}}">
           <view class="action-btn edit" catchtap="editItem" data-item="{{item}}">
             <text class="btn-text">编辑</text>
           </view>
@@ -86,8 +83,11 @@
   <!-- 统计信息 -->
   <view class="stats-bar">
     <text class="stats-text">共 {{totalItems}} 个物品</text>
-    <view class="merge-all-btn" bindtap="showMergeAllDialog">
-      <text class="merge-text">批量整理</text>
+    <view class="add-item-btn" bindtap="showAddItemDialog">
+      <text class="add-text">+ 加入物品</text>
     </view>
   </view>
+
+  <!-- 物品表单组件 -->
+  <item-form id="itemForm" mode="manage" bind:confirm="onItemFormConfirm"></item-form>
 </view>

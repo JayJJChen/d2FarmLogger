@@ -271,6 +271,25 @@
     color: #666;
   }
 
+  .add-item-btn {
+    padding: 12rpx 20rpx;
+    background: #27ae60;
+    color: white;
+    border-radius: 20rpx;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+
+    &:active {
+      opacity: 0.8;
+    }
+
+    .add-text {
+      font-size: 24rpx;
+      font-weight: 500;
+    }
+  }
+
   .merge-all-btn {
     padding: 12rpx 20rpx;
     background: #FF9800;
@@ -410,6 +429,14 @@
 
     .stats-text {
       font-size: 22rpx;
+    }
+
+    .add-item-btn {
+      padding: 10rpx 16rpx;
+
+      .add-text {
+        font-size: 22rpx;
+      }
     }
 
     .merge-all-btn {
@@ -558,6 +585,14 @@
 
     .stats-text {
       font-size: 20rpx;
+    }
+
+    .add-item-btn {
+      padding: 8rpx 12rpx;
+
+      .add-text {
+        font-size: 20rpx;
+      }
     }
 
     .merge-all-btn {

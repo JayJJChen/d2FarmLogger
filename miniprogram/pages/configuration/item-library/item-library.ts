@@ -1,4 +1,6 @@
 import { ItemLibrary, ItemLibraryItem, ItemCategory, ITEM_CATEGORIES } from '../../../models/item-library'
+import { extendObject } from '../../../models/character'
+import { ItemStorageService } from '../../../services/itemStorageService'
 
 interface ItemLibraryData {
   items: ItemLibrary[]
@@ -9,132 +11,6 @@ interface ItemLibraryData {
   sortOrder: 'usage' | 'time'
   totalItems: number
 }
-
-// Mock物品数据
-const mockItems: ItemLibrary[] = [
-  // 暗金物品
-  {
-    id: 'shako',
-    name: '军帽',
-    category: ITEM_CATEGORIES[0], // unique
-    isBuiltIn: false,
-    usageCount: 15,
-    createTime: Date.now() - 25 * 24 * 60 * 60 * 1000,
-    updateTime: Date.now() - 2 * 24 * 60 * 60 * 1000
-  },
-  {
-    id: 'shako_en',
-    name: 'Shako',
-    category: ITEM_CATEGORIES[0],
-    isBuiltIn: false,
-    usageCount: 8,
-    createTime: Date.now() - 20 * 24 * 60 * 60 * 1000,
-    updateTime: Date.now() - 5 * 24 * 60 * 60 * 1000
-  },
-  {
-    id: 'griffon',
-    name: '格里风之眼',
-    category: ITEM_CATEGORIES[0],
-    isBuiltIn: false,
-    usageCount: 6,
-    createTime: Date.now() - 18 * 24 * 60 * 60 * 1000,
-    updateTime: Date.now() - 3 * 24 * 60 * 60 * 1000
-  },
-  {
-    id: 'wartraveler',
-    name: '战争旅者',
-    category: ITEM_CATEGORIES[0],
-    isBuiltIn: false,
-    usageCount: 12,
-    createTime: Date.now() - 22 * 24 * 60 * 60 * 1000,
-    updateTime: Date.now() - 1 * 24 * 60 * 60 * 1000
-  },
-  // 套装物品
-  {
-    id: 'tal_rasha_mask',
-    name: '塔拉夏面具',
-    category: ITEM_CATEGORIES[1], // set
-    isBuiltIn: false,
-    usageCount: 4,
-    createTime: Date.now() - 15 * 24 * 60 * 60 * 1000,
-    updateTime: Date.now() - 6 * 24 * 60 * 60 * 1000
-  },
-  // 符文
-  {
-    id: 'ber',
-    name: 'Ber',
-    category: ITEM_CATEGORIES[4], // rune
-    isBuiltIn: true,
-    usageCount: 25,
-    createTime: Date.now() - 30 * 24 * 60 * 60 * 1000,
-    updateTime: Date.now() - 1 * 60 * 60 * 1000
-  },
-  {
-    id: 'jah',
-    name: 'Jah',
-    category: ITEM_CATEGORIES[4],
-    isBuiltIn: true,
-    usageCount: 18,
-    createTime: Date.now() - 30 * 24 * 60 * 60 * 1000,
-    updateTime: Date.now() - 3 * 60 * 60 * 1000
-  },
-  {
-    id: 'sur',
-    name: 'Sur',
-    category: ITEM_CATEGORIES[4],
-    isBuiltIn: true,
-    usageCount: 9,
-    createTime: Date.now() - 30 * 24 * 60 * 60 * 1000,
-    updateTime: Date.now() - 12 * 60 * 60 * 1000
-  },
-  // 钥匙
-  {
-    id: 'key_hate',
-    name: '憎恨之钥',
-    category: ITEM_CATEGORIES[6], // key
-    isBuiltIn: true,
-    usageCount: 32,
-    createTime: Date.now() - 30 * 24 * 60 * 60 * 1000,
-    updateTime: Date.now() - 30 * 60 * 1000
-  },
-  {
-    id: 'key_terror',
-    name: '恐惧之钥',
-    category: ITEM_CATEGORIES[6],
-    isBuiltIn: true,
-    usageCount: 28,
-    createTime: Date.now() - 30 * 24 * 60 * 60 * 1000,
-    updateTime: Date.now() - 45 * 60 * 1000
-  },
-  {
-    id: 'key_destruction',
-    name: '毁灭之钥',
-    category: ITEM_CATEGORIES[6],
-    isBuiltIn: true,
-    usageCount: 26,
-    createTime: Date.now() - 30 * 24 * 60 * 60 * 1000,
-    updateTime: Date.now() - 90 * 60 * 1000
-  },
-  // 底材
-  {
-    id: 'monarch_4soc',
-    name: '君王盾 4凹',
-    category: ITEM_CATEGORIES[5], // base
-    isBuiltIn: false,
-    usageCount: 7,
-    createTime: Date.now() - 12 * 24 * 60 * 60 * 1000,
-    updateTime: Date.now() - 4 * 24 * 60 * 60 * 1000
-  },
-  {
-    id: 'phaseblade_5soc',
-    name: '幻化之刃 5凹',
-    category: ITEM_CATEGORIES[5],
-    isBuiltIn: false,
-    usageCount: 5,
-    createTime: Date.now() - 10 * 24 * 60 * 60 * 1000,
-    updateTime: Date.now() - 2 * 24 * 60 * 60 * 1000
-  }
-]
 
 Page({
   data: {
@@ -155,12 +31,14 @@ Page({
    * 加载物品数据
    */
   loadItems() {
+    // 从存储服务获取所有物品数据
+    const allItems = ItemStorageService.getAllItems()
+
     // 添加时间格式化
-    const processedItems = mockItems.map(item => {
-      return {
-        ...item,
-        createTimeText: this.formatTime(item.createTime)
-      }
+    const processedItems = allItems.map(item => {
+      const result = extendObject({}, item)
+      result.createTimeText = this.formatTime(item.createTime)
+      return result
     })
 
     // 计算分类数量
@@ -182,10 +60,9 @@ Page({
    */
   calculateCategories(items: ItemLibrary[]) {
     const categories = ITEM_CATEGORIES.map(category => {
-      return {
-        ...category,
-        count: items.filter(item => item.category.key === category.key).length
-      }
+      const result = extendObject({}, category)
+      result.count = items.filter(function(item) { return item.category.key === category.key }).length
+      return result
     })
     return categories
   },
@@ -218,10 +95,11 @@ Page({
       }
     })
 
-    return filtered.map(item => ({
-      ...item,
-      createTimeText: this.formatTime(item.createTime)
-    })) as ItemLibraryItem[]
+    return filtered.map(function(item) {
+      var result = extendObject({}, item)
+      result.createTimeText = this.formatTime(item.createTime)
+      return result
+    }.bind(this)) as ItemLibraryItem[]
   },
 
   /**
@@ -306,25 +184,43 @@ Page({
   },
 
   /**
-   * 合并物品
-   */
-  mergeItem(e: any) {
-    const item = e.currentTarget.dataset.item
-    wx.showToast({
-      title: `合并物品: ${item.name}`,
-      icon: 'none'
-    })
-  },
-
-  /**
    * 编辑物品
    */
   editItem(e: any) {
     const item = e.currentTarget.dataset.item
-    wx.showToast({
-      title: `编辑物品: ${item.name}`,
-      icon: 'none'
+
+    if (item.isBuiltIn) {
+      wx.showToast({
+        title: '内置物品不能编辑',
+        icon: 'none'
+      })
+      return
+    }
+
+    // 显示编辑对话框
+    wx.showModal({
+      title: '编辑物品',
+      editable: true,
+      placeholderText: '请输入物品名称',
+      content: item.name,
+      success: (res) => {
+        if (res.confirm && res.content && res.content.trim()) {
+          this.updateItemName(item, res.content.trim())
+        }
+      }
     })
+  },
+
+  /**
+   * 更新物品名称
+   */
+  updateItemName(item: ItemLibrary, newName: string) {
+    const success = ItemStorageService.updateItem(item.id, { name: newName })
+
+    if (success) {
+      // 重新加载数据
+      this.loadItems()
+    }
   },
 
   /**
@@ -332,7 +228,6 @@ Page({
    */
   deleteItem(e: any) {
     const item = e.currentTarget.dataset.item
-    const index = this.data.items.findIndex(i => i.id === item.id)
 
     if (item.isBuiltIn) {
       wx.showToast({
@@ -347,40 +242,49 @@ Page({
       content: `确定要删除物品"${item.name}"吗？`,
       success: (res) => {
         if (res.confirm) {
-          const items = this.data.items
-          items.splice(index, 1)
+          const success = ItemStorageService.deleteItem(item.id)
 
-          // 重新计算分类和过滤
-          const categories = this.calculateCategories(items)
-          const filteredItems = this.filterAndSortItems(items, this.data.currentCategory, this.data.searchKeyword, this.data.sortOrder)
-
-          this.setData({
-            items: items,
-            categories: categories,
-            filteredItems: filteredItems,
-            totalItems: items.length
-          })
-
-          wx.showToast({
-            title: '删除成功',
-            icon: 'success'
-          })
+          if (success) {
+            // 重新加载数据
+            this.loadItems()
+          }
         }
       }
     })
   },
 
   /**
-   * 批量合并对话框
+   * 显示添加物品对话框
    */
-  showMergeAllDialog() {
-    wx.showToast({
-      title: '批量合并功能开发中',
-      icon: 'none'
-    })
+  showAddItemDialog() {
+    // 使用新的item-form组件
+    const itemForm = this.selectComponent('#itemForm')
+    if (itemForm) {
+      itemForm.show()
+    }
   },
 
-  
+  /**
+   * 处理物品表单确认事件
+   */
+  onItemFormConfirm(e: any) {
+    const formData = e.detail
+
+    if (formData.mode === 'manage') {
+      // 物品管理模式：添加新物品到词库
+      const success = ItemStorageService.createItem(formData.name, formData.category)
+
+      if (success) {
+        // 重新加载数据
+        this.loadItems()
+      }
+    } else {
+      // Session记录模式：处理session记录（预留功能）
+      console.log('Session记录模式：', formData)
+      // TODO: 实现session记录功能
+    }
+  },
+
   onShow() {
     this.loadItems()
   }

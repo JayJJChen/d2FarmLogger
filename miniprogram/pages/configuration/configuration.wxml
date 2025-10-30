@@ -42,7 +42,7 @@
         <view class="card-icon">⚔️</view>
         <view class="card-info">
           <text class="card-title">物品管理</text>
-          <text class="card-desc">管理物品词库（用户自建）</text>
+          <text class="card-desc">管理物品词库</text>
         </view>
         <view class="card-arrow">›</view>
       </view>
