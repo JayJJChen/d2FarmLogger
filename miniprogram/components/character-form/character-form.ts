@@ -1,4 +1,4 @@
-import { Character, CharacterClass } from '../../models/character'
+import { Character, CharacterClass, extendObject, validateCharacterName, validateLevel, validateMagicFind } from '../../models/character'
 
 Component({
   properties: {
@@ -78,29 +78,34 @@ Component({
     },
 
     validateForm(): { isValid: boolean; message?: string } {
-      const { name, level, magicFind } = this.data.formData
+      var formData = this.data.formData
 
-      if (!name.trim()) {
+      // 验证名称
+      if (!formData.name || !formData.name.trim()) {
         return { isValid: false, message: '请输入人物名称' }
       }
 
-      if (name.trim().length > 20) {
-        return { isValid: false, message: '人物名称不能超过20个字符' }
+      if (!validateCharacterName(formData.name.trim())) {
+        return { isValid: false, message: '人物名称只能是1-20个中英文字符' }
       }
 
-      if (level && (isNaN(Number(level)) || Number(level) < 1 || Number(level) > 99)) {
-        return { isValid: false, message: '等级必须是1-99之间的数字' }
+      // 验证等级
+      var levelValue = formData.level ? Number(formData.level) : undefined
+      if (!validateLevel(levelValue)) {
+        return { isValid: false, message: '等级必须是1-99之间的整数' }
       }
 
-      if (magicFind && (isNaN(Number(magicFind)) || Number(magicFind) < 0)) {
-        return { isValid: false, message: 'MF值必须是非负数' }
+      // 验证MF值
+      var magicFindValue = formData.magicFind ? Number(formData.magicFind) : undefined
+      if (!validateMagicFind(magicFindValue)) {
+        return { isValid: false, message: 'MF值必须是0-9999之间的整数' }
       }
 
       return { isValid: true }
     },
 
     onSubmit() {
-      const validation = this.validateForm()
+      var validation = this.validateForm()
       if (!validation.isValid) {
         wx.showToast({
           title: validation.message,
@@ -109,12 +114,13 @@ Component({
         return
       }
 
-      const formData = this.data.formData
-      const characterData: any = {
+      var formData = this.data.formData
+      var characterData: any = {
         name: formData.name.trim(),
         class: formData.class
       }
 
+      // 添加可选字段
       if (formData.level) {
         characterData.level = Number(formData.level)
       }
@@ -124,15 +130,18 @@ Component({
       }
 
       if (this.data.editMode && this.data.character) {
-        const updatedCharacter = this.extendObject(this.data.character, characterData)
+        // 编辑模式：保留原有ID和时间信息
+        var updatedCharacter = extendObject({}, this.data.character)
+        updatedCharacter = extendObject(updatedCharacter, characterData)
         updatedCharacter.updateTime = Date.now()
         this.triggerEvent('submit', {
           type: 'edit',
           character: updatedCharacter
         })
       } else {
-        const newCharacter = this.extendObject({}, characterData)
-        newCharacter.id = Date.now().toString()
+        // 创建模式：生成新角色
+        var newCharacter = extendObject({}, characterData)
+        // ID会在页面中生成，这里不设置
         newCharacter.createTime = Date.now()
         newCharacter.updateTime = Date.now()
         this.triggerEvent('submit', {
@@ -154,15 +163,7 @@ Component({
       this.triggerEvent('cancel')
     },
 
-    extendObject(target: any, source: any): any {
-      for (const key in source) {
-        if (source.hasOwnProperty(key)) {
-          target[key] = source[key]
-        }
-      }
-      return target
-    },
-
+    
     resetForm() {
       this.setData({
         formData: {

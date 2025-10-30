@@ -1,10 +1,14 @@
-import { Character, CharacterClass } from '../../models/character'
+import { Character, CharacterClass, extendObject } from '../../models/character'
+import { Scene } from '../../models/scene'
+var { CharacterStorageService } = require('../../services/characterStorageService')
 
 interface CharacterPageData {
   characters: Character[]
   showForm: boolean
   editMode: boolean
   editingCharacter: Character | null
+  // 预留场景类型引用，确保编译包含scene.js
+  _sceneType: Scene | null
 }
 
 Page({
@@ -12,43 +16,31 @@ Page({
     characters: [],
     showForm: false,
     editMode: false,
-    editingCharacter: null
+    editingCharacter: null,
+    _sceneType: null
   } as CharacterPageData,
 
   onLoad() {
-    this.loadMockData()
+    this.loadCharacters()
   },
 
   onShow() {
-    this.loadMockData()
+    this.loadCharacters()
   },
 
-  loadMockData() {
-    const mockCharacters: Character[] = [
-      {
-        id: '1',
-        name: '冰法',
-        class: CharacterClass.Sorceress,
-        level: 90,
-        magicFind: 302,
-        defaultSceneIds: ['1', '2'],
-        createTime: Date.now() - 86400000,
-        updateTime: Date.now() - 86400000
-      },
-      {
-        id: '2',
-        name: '盾骑',
-        class: CharacterClass.Paladin,
-        level: 85,
-        magicFind: 150,
-        createTime: Date.now() - 172800000,
-        updateTime: Date.now() - 172800000
-      }
-    ]
-
-    this.setData({
-      characters: mockCharacters
-    })
+  loadCharacters() {
+    try {
+      var characters = CharacterStorageService.getAllCharacters()
+      this.setData({
+        characters: characters
+      })
+    } catch (error) {
+      console.error('加载角色数据失败:', error)
+      wx.showToast({
+        title: '加载失败',
+        icon: 'none'
+      })
+    }
   },
 
   onAddCharacter() {
@@ -131,13 +123,27 @@ Page({
   },
 
   deleteCharacter(characterId: string) {
-    const characters = this.data.characters.filter(c => c.id !== characterId)
-    this.setData({ characters })
-
-    wx.showToast({
-      title: '删除成功',
-      icon: 'success'
-    })
+    try {
+      var success = CharacterStorageService.deleteCharacter(characterId)
+      if (success) {
+        this.loadCharacters()
+        wx.showToast({
+          title: '删除成功',
+          icon: 'success'
+        })
+      } else {
+        wx.showToast({
+          title: '删除失败',
+          icon: 'none'
+        })
+      }
+    } catch (error) {
+      console.error('删除角色失败:', error)
+      wx.showToast({
+        title: '删除失败',
+        icon: 'none'
+      })
+    }
   },
 
   onFormSubmit(e: any) {
@@ -165,24 +171,55 @@ Page({
   },
 
   createCharacter(character: Character) {
-    const characters = this.data.characters.concat([character])
-    this.setData({ characters })
+    try {
+      // 生成角色ID
+      if (!character.id) {
+        character.id = CharacterStorageService.generateCharacterId()
+      }
 
-    wx.showToast({
-      title: '创建成功',
-      icon: 'success'
-    })
+      var success = CharacterStorageService.createCharacter(character)
+      if (success) {
+        this.loadCharacters()
+        wx.showToast({
+          title: '创建成功',
+          icon: 'success'
+        })
+      } else {
+        wx.showToast({
+          title: '创建失败',
+          icon: 'none'
+        })
+      }
+    } catch (error) {
+      console.error('创建角色失败:', error)
+      wx.showToast({
+        title: '创建失败',
+        icon: 'none'
+      })
+    }
   },
 
   updateCharacter(character: Character) {
-    const characters = this.data.characters.map(c =>
-      c.id === character.id ? character : c
-    )
-    this.setData({ characters })
-
-    wx.showToast({
-      title: '保存成功',
-      icon: 'success'
-    })
+    try {
+      var success = CharacterStorageService.updateCharacter(character)
+      if (success) {
+        this.loadCharacters()
+        wx.showToast({
+          title: '保存成功',
+          icon: 'success'
+        })
+      } else {
+        wx.showToast({
+          title: '保存失败',
+          icon: 'none'
+        })
+      }
+    } catch (error) {
+      console.error('更新角色失败:', error)
+      wx.showToast({
+        title: '保存失败',
+        icon: 'none'
+      })
+    }
   }
 })
