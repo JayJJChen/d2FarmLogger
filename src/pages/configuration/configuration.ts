@@ -1,5 +1,5 @@
 import { SceneStorageService } from '../../services/sceneStorageService'
-import { ItemStorageService } from '../../services/itemStorageService'
+var { ItemStorageService } = require('../../services/itemStorageService')
 
 interface ConfigurationData {
   sceneFlowsCount: number

@@ -5,9 +5,11 @@
   "scripts": {
     "dev": "tsc --watch",
     "build": "tsc",
-    "build:prod": "npm run clean && npm run build && npm run deploy",
+    "build:prod": "npm run clean:all && npm run build && npm run deploy",
     "clean": "rimraf build",
-    "deploy": "xcopy /E /I /Y build\\* miniprogram\\",
+    "clean:miniprogram": "rimraf miniprogram",
+    "clean:all": "npm run clean && npm run clean:miniprogram",
+    "deploy": "node -e \"const fs = require('fs'); const path = require('path'); function copyRecursive(src, dest) { if (!fs.existsSync(dest)) fs.mkdirSync(dest, {recursive: true}); const entries = fs.readdirSync(src, {withFileTypes: true}); for (let entry of entries) { const srcPath = path.join(src, entry.name); const destPath = path.join(dest, entry.name); if (entry.isDirectory()) { copyRecursive(srcPath, destPath); } else { fs.copyFileSync(srcPath, destPath); } } } copyRecursive('build', 'miniprogram');\" && node copy-assets.js",
     "type-check": "tsc --noEmit",
     "prepare": "npm run build"
   },

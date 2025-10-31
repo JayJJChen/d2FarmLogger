@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var item_library_1 = require("../../../models/item-library");
 var character_1 = require("../../../models/character");
-var itemStorageService_1 = require("../../../services/itemStorageService");
+var ItemStorageService = require('../../../services/itemStorageService').ItemStorageService;
 Page({
     data: {
         items: [],
@@ -22,7 +22,7 @@ Page({
     loadItems: function () {
         var _this = this;
         // 从存储服务获取所有物品数据
-        var allItems = itemStorageService_1.ItemStorageService.getAllItems();
+        var allItems = ItemStorageService.getAllItems();
         // 添加时间格式化
         var processedItems = allItems.map(function (item) {
             var result = (0, character_1.extendObject)({}, item);
@@ -188,7 +188,7 @@ Page({
      * 更新物品名称
      */
     updateItemName: function (item, newName) {
-        var success = itemStorageService_1.ItemStorageService.updateItem(item.id, { name: newName });
+        var success = ItemStorageService.updateItem(item.id, { name: newName });
         if (success) {
             // 重新加载数据
             this.loadItems();
@@ -212,7 +212,7 @@ Page({
             content: "\u786E\u5B9A\u8981\u5220\u9664\u7269\u54C1\"".concat(item.name, "\"\u5417\uFF1F"),
             success: function (res) {
                 if (res.confirm) {
-                    var success = itemStorageService_1.ItemStorageService.deleteItem(item.id);
+                    var success = ItemStorageService.deleteItem(item.id);
                     if (success) {
                         // 重新加载数据
                         _this.loadItems();
@@ -238,7 +238,7 @@ Page({
         var formData = e.detail;
         if (formData.mode === 'manage') {
             // 物品管理模式：添加新物品到词库
-            var success = itemStorageService_1.ItemStorageService.createItem(formData.name, formData.category);
+            var success = ItemStorageService.createItem(formData.name, formData.category);
             if (success) {
                 // 重新加载数据
                 this.loadItems();

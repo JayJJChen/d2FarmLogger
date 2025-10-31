@@ -48,24 +48,13 @@ Component({
             this.triggerEvent('config', { character: this.data.character });
         },
         onDeleteTap: function () {
-            var self = this;
-            wx.showModal({
-                title: '删除确认',
-                content: '确定要删除角色「' + this.data.character.name + '」吗？此操作无法撤销。',
-                confirmText: '删除',
-                confirmColor: '#ff5252',
-                success: function (res) {
-                    if (res.confirm) {
-                        // 重置滑动状态
-                        self.setData({
-                            translateX: 0,
-                            isSliding: false
-                        });
-                        // 触发删除事件
-                        self.triggerEvent('delete', { character: self.data.character });
-                    }
-                }
+            // 重置滑动状态
+            this.setData({
+                translateX: 0,
+                isSliding: false
             });
+            // 触发删除事件，由页面处理确认对话框
+            this.triggerEvent('delete', { character: this.data.character });
         },
         onStartSessionTap: function () {
             this.triggerEvent('startsession', { character: this.data.character });

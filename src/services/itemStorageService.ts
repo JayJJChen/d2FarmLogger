@@ -354,4 +354,4 @@ var ItemStorageService = {
   }
 }
 
-export { ItemStorageService, STORAGE_KEYS }
+module.exports = { ItemStorageService, STORAGE_KEYS }

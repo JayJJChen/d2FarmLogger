@@ -4,7 +4,7 @@
 var ItemLibrary = require('../../models/item-library.js');
 var ItemCategory = ItemLibrary.ItemCategory;
 var ITEM_CATEGORIES = ItemLibrary.ITEM_CATEGORIES;
-var ItemStorageService = require('../../services/itemStorageService.js');
+var ItemStorageService = require('../../services/itemStorageService.js').ItemStorageService;
 // ItemFormData 组件数据接口
 // mode: 'manage' | 'session'  // manage: 添加物品到库, session: 记录session掉落
 // visible: boolean
@@ -30,7 +30,9 @@ Component({
         selectedCategory: null,
         itemName: '',
         itemNote: '',
-        categories: []
+        categories: [],
+        confirmButtonText: '添加物品',
+        titleText: '添加物品'
     },
     /**
      * 组件生命周期
@@ -50,19 +52,27 @@ Component({
         initCategories: function () {
             var mode = this.data.mode;
             var categories = [];
+            var confirmButtonText = '添加物品';
+            var titleText = '添加物品';
             if (mode === 'manage') {
                 // 物品管理模式：排除内置物品分类（符文、钥匙、精华）
                 var excludeKeys = ['rune', 'key', 'essence'];
                 categories = ITEM_CATEGORIES.filter(function (category) {
                     return excludeKeys.indexOf(category.key) === -1;
                 });
+                confirmButtonText = '添加物品';
+                titleText = '添加物品';
             }
             else {
                 // Session记录模式：显示所有分类
                 categories = ITEM_CATEGORIES;
+                confirmButtonText = '记录掉落';
+                titleText = '记录掉落';
             }
             this.setData({
-                categories: categories
+                categories: categories,
+                confirmButtonText: confirmButtonText,
+                titleText: titleText
             });
         },
         /**

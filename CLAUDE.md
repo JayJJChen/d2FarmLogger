@@ -70,7 +70,7 @@ d2FarmLogger/
 │   ├── utils/             # 工具函数
 │   └── app.ts             # 应用入口
 ├── build/                 # 编译输出目录
-├── miniprogram/           # 微信小程序部署目录（仅JS文件）
+├── miniprogram/           # 微信小程序部署目录（JS+配置+样式+模板文件）
 ├── typings/              # 类型定义
 └── package.json          # 项目配置
 ```
@@ -85,34 +85,49 @@ npm run dev
 # 生产构建
 npm run build
 
-# 完整生产构建（清理+编译+部署）
+# 完整生产构建（清理build+miniprogram+编译+部署）
 npm run build:prod
 
 # 类型检查（不生成文件）
 npm run type-check
 
-# 清理编译文件
+# 清理编译文件（仅build目录）
 npm run clean
+
+# 清理部署文件（仅miniprogram目录）
+npm run clean:miniprogram
+
+# 清理所有文件（build+miniprogram目录）
+npm run clean:all
 ```
 
 #### 2. 代码修改流程
-1. **在src/目录下修改TypeScript文件**
-2. **自动编译到build目录**：`npm run dev` 或 `npm run build`
-3. **部署到miniprogram目录**：`npm run deploy`
-4. **在微信开发者工具中测试功能**
+1. **在src/目录下修改TypeScript文件或配置文件**
+2. **清理旧的编译文件**：`npm run clean:all`（推荐，确保完全重新编译）
+3. **编译到build目录**：`npm run build`（仅编译.ts文件）
+4. **部署到miniprogram目录**：`npm run deploy`（自动复制所有必需文件）
+5. **在微信开发者工具中测试功能**
+
+⚠️ **重要提醒**：
+- 修改 `.ts` 文件：只需重新编译和部署
+- 修改 `.json/.scss/.wxml` 文件：必须重新部署（`npm run deploy`）
+- 如果遇到缓存问题：按"常见问题3"的步骤强制刷新微信开发者工具
 
 #### 3. 提交代码前检查
 ```bash
-# 1. TypeScript类型检查
+# 1. 完整清理（确保没有旧文件干扰）
+npm run clean:all
+
+# 2. TypeScript类型检查
 npm run type-check
 
-# 2. 编译测试
+# 3. 编译测试
 npm run build
 
-# 3. ES5兼容性检查
+# 4. ES5兼容性检查
 npx tsc --noEmit --target ES5 --lib ES5
 
-# 4. 部署到miniprogram测试
+# 5. 部署到miniprogram测试（包含所有配置文件）
 npm run deploy
 ```
 
@@ -120,15 +135,24 @@ npm run deploy
 
 #### 1. 源码管理
 - ✅ **所有TypeScript源码必须在src/目录下**
-- ✅ **miniprogram/目录只存放编译后的JavaScript文件**
+- ✅ **miniprogram/目录存放编译后的JS文件+配置+样式+模板文件**
 - ✅ **build/目录作为编译中间输出**
-- ❌ **禁止直接修改miniprogram/中的JavaScript文件**
+- ❌ **禁止直接修改miniprogram/中的任何文件**
+- ⚠️ **重要：TypeScript编译器不会自动复制.json/.scss/.wxml文件**
 
 #### 2. 导入路径规范
 - ✅ **使用相对路径导入模块**
 - ✅ **服务层导入**：`import { Service } from '../services/service'`
 - ✅ **模型导入**：`import { Model } from '../../models/model'`
 - ❌ **禁止使用绝对路径或别名**
+
+#### 2.1 模块导入导出兼容性（重要！）
+- **导出语法**：使用 `module.exports = { Service }` 替代 `export { Service }`
+- **导入语法**：
+  - 推荐：`var { Service } = require('../services/service')`
+  - 或：`var Service = require('../services/service').Service`
+- ❌ **避免**：`import { Service } from '../services/service'`（可能导致兼容性问题）
+- ⚠️ **原因**：确保与微信小程序的require机制完全兼容
 
 #### 3. TypeScript配置
 - **编译目标**：ES5（微信小程序兼容）
@@ -137,9 +161,11 @@ npm run deploy
 - **源码目录**：`./src`
 
 #### 4. 构建部署流程
-1. **src/ → build/**：TypeScript编译
-2. **build/ → miniprogram/**：文件复制部署
-3. **miniprogram/ → 微信开发者工具**：最终运行
+1. **清理旧文件**：`npm run clean:all`（清理build和miniprogram目录）
+2. **src/ → build/**：TypeScript编译（仅编译.ts文件）
+3. **src/ → miniprogram/**：复制非TS文件（.json/.scss/.wxml等配置和模板文件）
+4. **build/ → miniprogram/**：复制编译后的JS文件
+5. **miniprogram/ → 微信开发者工具**：最终运行
 
 ### 优势说明
 
@@ -169,6 +195,28 @@ npm run deploy
 1. 检查ES5兼容性：`npx tsc --noEmit --target ES5`
 2. 在微信开发者工具中调试
 3. 确认部署流程完整执行
+
+#### 常见问题及解决方案
+
+**问题1：`app.json` 文件缺失错误**
+- **原因**：清理时删除了miniprogram目录，但只重新编译了TypeScript文件
+- **解决**：运行 `npm run deploy` 自动复制所有配置文件
+
+**问题2：`XXX is not a function` 错误**
+- **原因**：模块导入导出不兼容，或微信开发者工具缓存问题
+- **解决**：
+  1. 检查导入语法：使用 `var { Service } = require()` 而非 `import`
+  2. 检查导出语法：使用 `module.exports = {}` 而非 `export`
+  3. 强制刷新微信开发者工具：关闭工具→重新打开→清除缓存→重新编译
+
+**问题3：微信开发者工具缓存导致代码不更新**
+- **症状**：代码已修改但行为不变，控制台显示旧错误
+- **解决**：
+  1. 关闭微信开发者工具
+  2. 重新打开项目
+  3. 点击"工具"→"清除缓存"→"清除文件缓存"
+  4. 重新编译项目
+  5. 查看控制台确认最新代码已加载
 
 **记住：永远不要直接修改miniprogram目录中的文件！所有修改都应该在src目录中进行。**
 

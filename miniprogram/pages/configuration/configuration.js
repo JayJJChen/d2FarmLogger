@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var sceneStorageService_1 = require("../../services/sceneStorageService");
-var itemStorageService_1 = require("../../services/itemStorageService");
+var ItemStorageService = require('../../services/itemStorageService').ItemStorageService;
 Page({
     data: {
         sceneFlowsCount: 0,
@@ -20,7 +20,7 @@ Page({
         // 获取真实的场景和场景流程数量
         var allScenes = sceneStorageService_1.SceneStorageService.getAllScenes();
         var allSceneFlows = sceneStorageService_1.SceneStorageService.getAllSceneFlows();
-        var allItems = itemStorageService_1.ItemStorageService.getAllItems();
+        var allItems = ItemStorageService.getAllItems();
         this.setData({
             sceneFlowsCount: allSceneFlows.length,
             scenesCount: allScenes.length,

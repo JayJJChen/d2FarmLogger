@@ -1,6 +1,6 @@
 import { ItemLibrary, ItemLibraryItem, ItemCategory, ITEM_CATEGORIES } from '../../../models/item-library'
 import { extendObject } from '../../../models/character'
-import { ItemStorageService } from '../../../services/itemStorageService'
+var { ItemStorageService } = require('../../../services/itemStorageService')
 
 interface ItemLibraryData {
   items: ItemLibrary[]

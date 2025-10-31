@@ -4,7 +4,7 @@
   <view class="item-form-content" catchtap="onContentTap">
     <!-- 标题栏 -->
     <view class="form-header">
-      <text class="form-title">{{getTitleText()}}</text>
+      <text class="form-title">{{titleText}}</text>
       <view class="close-btn" bindtap="onCancel">×</view>
     </view>
 
@@ -58,7 +58,7 @@
         <text class="btn-text">取消</text>
       </view>
       <view class="form-btn confirm" bindtap="onConfirm">
-        <text class="btn-text">{{getConfirmButtonText()}}</text>
+        <text class="btn-text">{{confirmButtonText}}</text>
       </view>
     </view>
   </view>

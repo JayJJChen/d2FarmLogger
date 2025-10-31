@@ -6,7 +6,11 @@
       "Bash(npx tsc:*)",
       "Bash(test:*)",
       "Bash(npm run)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(npm run clean:*)",
+      "Bash(findstr:*)",
+      "Bash(npm run type-check:*)",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []

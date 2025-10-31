@@ -3,7 +3,6 @@
 // 提供物品数据的本地存储CRUD操作
 // 确保ES5兼容性
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.STORAGE_KEYS = exports.ItemStorageService = void 0;
 var item_library_1 = require("../models/item-library");
 var StorageUtils = require('../utils/storageUtils');
 // 存储键值常量
@@ -11,7 +10,6 @@ var STORAGE_KEYS = {
     ITEMS: 'd2_farm_logger_items',
     VERSION: 'd2_farm_logger_version'
 };
-exports.STORAGE_KEYS = STORAGE_KEYS;
 // 数据版本信息
 var CURRENT_VERSION = '1.0.0';
 /**
@@ -321,4 +319,4 @@ var ItemStorageService = {
         return item_library_1.ITEM_CATEGORIES.slice(0, 5);
     }
 };
-exports.ItemStorageService = ItemStorageService;
+module.exports = { ItemStorageService: ItemStorageService, STORAGE_KEYS: STORAGE_KEYS };
