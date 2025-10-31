@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "物品管理",
+  "backgroundColor": "#f8f9fa",
+  "backgroundTextStyle": "dark",
+  "usingComponents": {
+    "item-form": "/components/item-form/item-form"
+  }
+}

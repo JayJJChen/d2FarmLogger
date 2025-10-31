@@ -24,8 +24,8 @@ Component({
         deleteBtnWidth: 120
     },
     methods: {
-        formatDisplayInfo(character) {
-            let info = character.name;
+        formatDisplayInfo: function (character) {
+            var info = character.name;
             if (character.level) {
                 info += ' (Lvl ' + character.level;
             }
@@ -41,13 +41,13 @@ Component({
             info += ')';
             return info;
         },
-        onEditTap() {
+        onEditTap: function () {
             this.triggerEvent('edit', { character: this.data.character });
         },
-        onConfigTap() {
+        onConfigTap: function () {
             this.triggerEvent('config', { character: this.data.character });
         },
-        onDeleteTap() {
+        onDeleteTap: function () {
             var self = this;
             wx.showModal({
                 title: '删除确认',
@@ -67,17 +67,17 @@ Component({
                 }
             });
         },
-        onStartSessionTap() {
+        onStartSessionTap: function () {
             this.triggerEvent('startsession', { character: this.data.character });
         },
-        onTouchStart(e) {
+        onTouchStart: function (e) {
             this.setData({
                 startX: e.touches[0].clientX,
                 startTime: new Date().getTime(),
                 currentX: e.touches[0].clientX
             });
         },
-        onTouchMove(e) {
+        onTouchMove: function (e) {
             var moveX = e.touches[0].clientX;
             var deltaX = moveX - this.data.startX;
             // 只允许左滑
@@ -93,7 +93,7 @@ Component({
                 isSliding: true
             });
         },
-        onTouchEnd(e) {
+        onTouchEnd: function (e) {
             var endTime = new Date().getTime();
             var deltaTime = endTime - this.data.startTime;
             var deltaX = this.data.currentX - this.data.startX;
@@ -113,7 +113,7 @@ Component({
             });
         },
         // 重置滑动状态（供父组件调用）
-        resetSwipe() {
+        resetSwipe: function () {
             this.setData({
                 translateX: 0,
                 isSliding: false

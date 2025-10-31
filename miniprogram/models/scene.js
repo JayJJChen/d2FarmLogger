@@ -1,12 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createScene = createScene;
-exports.validateSceneName = validateSceneName;
-exports.validateSceneDescription = validateSceneDescription;
 /**
  * 创建场景对象
- * @param data 场景数据
- * @returns 完整的场景对象
+ * @param {any} data - 场景数据
+ * @returns {Object} 完整的场景对象
  */
 function createScene(data) {
     var scene = {
@@ -28,8 +25,8 @@ function createScene(data) {
 }
 /**
  * 验证场景名称
- * @param name 场景名称
- * @returns 是否有效
+ * @param {string} name - 场景名称
+ * @returns {boolean} 是否有效
  */
 function validateSceneName(name) {
     if (!name || typeof name !== 'string') {
@@ -44,8 +41,8 @@ function validateSceneName(name) {
 }
 /**
  * 验证场景描述
- * @param description 场景描述
- * @returns 是否有效
+ * @param {any} description - 场景描述
+ * @returns {boolean} 是否有效
  */
 function validateSceneDescription(description) {
     if (description === undefined || description === null) {
@@ -59,3 +56,8 @@ function validateSceneDescription(description) {
     }
     return true;
 }
+module.exports = {
+    createScene: createScene,
+    validateSceneName: validateSceneName,
+    validateSceneDescription: validateSceneDescription
+};

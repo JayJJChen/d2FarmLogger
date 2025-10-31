@@ -1,0 +1,35 @@
+<view class="characters-container">
+  <view class="page-header">
+    <text class="page-title">我的人物</text>
+  </view>
+
+  <view class="characters-list">
+    <character-card
+      wx:for="{{characters}}"
+      wx:key="id"
+      character="{{item}}"
+      bind:edit="onCharacterEdit"
+      bind:config="onCharacterConfig"
+      bind:delete="onCharacterDelete"
+      bind:startsession="onCharacterStartSession"
+    />
+
+    <view class="empty-state" wx:if="{{characters.length === 0}}">
+      <text class="empty-text">还没有创建人物</text>
+      <text class="empty-tip">点击下方按钮创建第一个人物</text>
+    </view>
+  </view>
+
+  <view class="add-button" bindtap="onAddCharacter">
+    <text class="add-icon">+</text>
+    <text class="add-text">新建人物</text>
+  </view>
+</view>
+
+<character-form
+  visible="{{showForm}}"
+  editMode="{{editMode}}"
+  character="{{editingCharacter}}"
+  bind:submit="onFormSubmit"
+  bind:cancel="onFormCancel"
+/>

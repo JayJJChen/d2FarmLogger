@@ -1,0 +1,4 @@
+<!--index.wxml-->
+<view class="container">
+  <text>欢迎使用小程序</text>
+</view>

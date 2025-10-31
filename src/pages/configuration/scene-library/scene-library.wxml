@@ -1,0 +1,52 @@
+<view class="scene-library-container">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">场景管理</text>
+    <text class="page-subtitle">管理所有场景，用于组合成MF路线</text>
+  </view>
+
+  <!-- 场景列表 -->
+  <view class="scene-list">
+    <view
+      wx:for="{{scenes}}"
+      wx:key="id"
+      class="scene-item"
+      data-index="{{index}}"
+    >
+      <!-- 场景内容 -->
+      <view class="scene-content">
+        <view class="scene-info">
+          <view class="scene-header">
+            <text class="scene-name">{{item.name}}</text>
+          </view>
+          <view wx:if="{{item.description}}" class="scene-description">
+            <text class="desc-text">{{item.description}}</text>
+          </view>
+          <view class="scene-meta">
+            <text class="meta-text">创建于 {{item.createTimeText}}</text>
+          </view>
+        </view>
+        <view class="scene-actions">
+          <view class="action-btn edit" catchtap="editScene" data-item="{{item}}">
+            <text class="btn-text">编辑</text>
+          </view>
+          <view class="action-btn delete" catchtap="deleteScene" data-item="{{item}}">
+            <text class="btn-text">删除</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:if="{{scenes.length === 0}}" class="empty-state">
+    <text class="empty-text">暂无场景</text>
+    <text class="empty-tip">点击下方按钮添加场景</text>
+  </view>
+
+  <!-- 添加按钮 -->
+  <view class="add-button" bindtap="addScene">
+    <text class="add-icon">+</text>
+    <text class="add-text">新增场景</text>
+  </view>
+</view>

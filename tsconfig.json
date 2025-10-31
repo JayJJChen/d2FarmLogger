@@ -3,7 +3,7 @@
     "strictNullChecks": false,
     "noImplicitAny": false,
     "module": "CommonJS",
-    "target": "ES2020",
+    "target": "ES5",
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
@@ -16,16 +16,21 @@
     "noUnusedParameters": false,
     "strict": false,
     "strictPropertyInitialization": false,
-    "lib": ["ES2020"],
+    "lib": ["ES5"],
     "typeRoots": [
       "./typings"
     ],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "outDir": "./build",
+    "rootDir": "./src"
   },
   "include": [
-    "./**/*.ts"
+    "./src/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "build",
+    "miniprogram",
+    "test_*.js"
   ]
 }

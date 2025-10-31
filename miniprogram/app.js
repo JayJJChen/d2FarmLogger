@@ -1,7 +1,6 @@
-// app.ts
 App({
     globalData: {},
-    onLaunch() {
+    onLaunch: function () {
         // 小程序启动时执行
     },
 });

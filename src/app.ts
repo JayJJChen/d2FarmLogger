@@ -1,4 +1,8 @@
 // app.ts
+interface IAppOption {
+  globalData: Record<string, any>
+}
+
 App<IAppOption>({
   globalData: {},
   onLaunch() {

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var { CharacterStorageService } = require('../../services/characterStorageService');
+var CharacterStorageService = require('../../services/characterStorageService').CharacterStorageService;
 Page({
     data: {
         characters: [],
@@ -9,13 +9,13 @@ Page({
         editingCharacter: null,
         _sceneType: null
     },
-    onLoad() {
+    onLoad: function () {
         this.loadCharacters();
     },
-    onShow() {
+    onShow: function () {
         this.loadCharacters();
     },
-    loadCharacters() {
+    loadCharacters: function () {
         try {
             var characters = CharacterStorageService.getAllCharacters();
             this.setData({
@@ -30,30 +30,30 @@ Page({
             });
         }
     },
-    onAddCharacter() {
+    onAddCharacter: function () {
         this.setData({
             showForm: true,
             editMode: false,
             editingCharacter: null
         });
     },
-    onCharacterEdit(e) {
-        const { character } = e.detail;
+    onCharacterEdit: function (e) {
+        var character = e.detail.character;
         this.setData({
             showForm: true,
             editMode: true,
             editingCharacter: character
         });
     },
-    onCharacterConfig(e) {
-        const { character } = e.detail;
+    onCharacterConfig: function (e) {
+        var character = e.detail.character;
         wx.showModal({
             title: '配置场景',
             content: character.name + ' 还没有配置默认场景列表，请先去设置页面设置MF路线。',
             showCancel: true,
             cancelText: '取消',
             confirmText: '去配置',
-            success: (res) => {
+            success: function (res) {
                 if (res.confirm) {
                     wx.switchTab({
                         url: '/pages/configuration/configuration'
@@ -62,8 +62,8 @@ Page({
             }
         });
     },
-    onCharacterStartSession(e) {
-        const { character } = e.detail;
+    onCharacterStartSession: function (e) {
+        var character = e.detail.character;
         if (!character.defaultSceneIds || character.defaultSceneIds.length === 0) {
             wx.showModal({
                 title: '提示',
@@ -71,7 +71,7 @@ Page({
                 showCancel: true,
                 cancelText: '取消',
                 confirmText: '去配置',
-                success: (res) => {
+                success: function (res) {
                     if (res.confirm) {
                         wx.switchTab({
                             url: '/pages/configuration/configuration'
@@ -85,8 +85,9 @@ Page({
             url: '/pages/sessions/session?characterId=' + character.id
         });
     },
-    onCharacterDelete(e) {
-        const { character } = e.detail;
+    onCharacterDelete: function (e) {
+        var _this = this;
+        var character = e.detail.character;
         wx.showModal({
             title: '确认删除',
             content: '确定要删除人物"' + character.name + '"吗？此操作不可恢复。',
@@ -94,14 +95,14 @@ Page({
             cancelText: '取消',
             confirmText: '删除',
             confirmColor: '#ff4444',
-            success: (res) => {
+            success: function (res) {
                 if (res.confirm) {
-                    this.deleteCharacter(character.id);
+                    _this.deleteCharacter(character.id);
                 }
             }
         });
     },
-    deleteCharacter(characterId) {
+    deleteCharacter: function (characterId) {
         try {
             var success = CharacterStorageService.deleteCharacter(characterId);
             if (success) {
@@ -126,8 +127,8 @@ Page({
             });
         }
     },
-    onFormSubmit(e) {
-        const { type, character } = e.detail;
+    onFormSubmit: function (e) {
+        var _a = e.detail, type = _a.type, character = _a.character;
         if (type === 'create') {
             this.createCharacter(character);
         }
@@ -140,14 +141,14 @@ Page({
             editingCharacter: null
         });
     },
-    onFormCancel() {
+    onFormCancel: function () {
         this.setData({
             showForm: false,
             editMode: false,
             editingCharacter: null
         });
     },
-    createCharacter(character) {
+    createCharacter: function (character) {
         try {
             // 生成角色ID
             if (!character.id) {
@@ -176,7 +177,7 @@ Page({
             });
         }
     },
-    updateCharacter(character) {
+    updateCharacter: function (character) {
         try {
             var success = CharacterStorageService.updateCharacter(character);
             if (success) {

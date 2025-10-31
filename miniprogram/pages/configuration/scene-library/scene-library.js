@@ -1,56 +1,98 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var SceneStorageService = require('../services/sceneStorageService');
+var sceneStorageService_1 = require("../../../services/sceneStorageService");
 Page({
     data: {
-        scenes: []
+        scenes: [],
+        categories: [],
+        currentCategory: 'all',
+        filteredScenes: []
     },
-    onLoad() {
+    onLoad: function () {
         this.loadScenes();
     },
     /**
      * 加载场景数据
      */
-    loadScenes() {
-        try {
-            // 初始化默认场景（如果需要）
-            SceneStorageService.SceneStorageService.initializeDefaultScenes();
-
-            // 从存储服务获取场景数据
-            const scenes = SceneStorageService.SceneStorageService.getAllScenes();
-            
-            // 添加时间格式化
-            const processedScenes = scenes.map(scene => {
-                return {
-                    ...scene,
-                    createTimeText: this.formatTime(scene.createTime),
-                    updateTimeText: this.formatTime(scene.updateTime),
-                    usageCountText: this.getUsageCountText(scene.usageCount)
-                };
-            });
-            
-            this.setData({
-                scenes: processedScenes
-            });
-        } catch (error) {
-            console.error('加载场景数据失败:', error);
-            wx.showToast({
-                title: '加载数据失败',
-                icon: 'none'
-            });
+    loadScenes: function () {
+        var _this = this;
+        // 初始化默认场景（如果需要）
+        sceneStorageService_1.SceneStorageService.initializeDefaultScenes();
+        // 从存储获取场景数据
+        var scenes = sceneStorageService_1.SceneStorageService.getAllScenes();
+        // 添加分类和时间格式化
+        var processedScenes = scenes.map(function (scene) {
+            return __assign(__assign({}, scene), { categoryText: _this.getCategoryText(scene), createTimeText: _this.formatTime(scene.createTime) });
+        });
+        // 计算分类数量
+        var categories = this.calculateCategories(processedScenes);
+        // 设置当前分类的场景
+        var filteredScenes = this.filterScenesByCategory(processedScenes, this.data.currentCategory);
+        this.setData({
+            scenes: processedScenes,
+            categories: categories,
+            filteredScenes: filteredScenes
+        });
+    },
+    /**
+     * 获取分类文本
+     */
+    getCategoryText: function (scene) {
+        if (scene.isBuiltIn) {
+            return '内置场景';
         }
+        else {
+            return '自定义场景';
+        }
+    },
+    /**
+     * 计算分类数量
+     */
+    calculateCategories: function (scenes) {
+        var categories = [
+            { key: 'all', name: '全部', count: scenes.length },
+            { key: 'builtin', name: '内置', count: scenes.filter(function (s) { return s.isBuiltIn; }).length },
+            { key: 'custom', name: '自定义', count: scenes.filter(function (s) { return !s.isBuiltIn; }).length }
+        ];
+        return categories;
+    },
+    /**
+     * 根据分类过滤场景
+     */
+    filterScenesByCategory: function (scenes, category) {
+        if (category === 'all') {
+            return scenes;
+        }
+        else if (category === 'builtin') {
+            return scenes.filter(function (scene) { return scene.isBuiltIn; });
+        }
+        else if (category === 'custom') {
+            return scenes.filter(function (scene) { return !scene.isBuiltIn; });
+        }
+        return scenes;
     },
     /**
      * 格式化时间
      */
-    formatTime(timestamp) {
-        const now = Date.now();
-        const diff = now - timestamp;
-        const days = Math.floor(diff / (24 * 60 * 60 * 1000));
+    formatTime: function (timestamp) {
+        var now = Date.now();
+        var diff = now - timestamp;
+        var days = Math.floor(diff / (24 * 60 * 60 * 1000));
         if (days === 0) {
-            const hours = Math.floor(diff / (60 * 60 * 1000));
+            var hours = Math.floor(diff / (60 * 60 * 1000));
             if (hours === 0) {
-                const minutes = Math.floor(diff / (60 * 1000));
+                var minutes = Math.floor(diff / (60 * 1000));
                 return minutes === 0 ? '刚刚' : minutes + '分钟前';
             }
             return hours + '小时前';
@@ -62,118 +104,77 @@ Page({
             return days + '天前';
         }
         else if (days < 30) {
-            const weeks = Math.floor(days / 7);
+            var weeks = Math.floor(days / 7);
             return weeks + '周前';
         }
         else {
-            const date = new Date(timestamp);
+            var date = new Date(timestamp);
             return (date.getMonth() + 1) + '月' + date.getDate() + '日';
         }
     },
-
     /**
-     * 格式化使用次数
+     * 切换分类
      */
-    getUsageCountText(count) {
-        if (count === 0) {
-            return '未使用';
-        } else if (count < 10) {
-            return count + '次';
-        } else if (count < 100) {
-            return count + '次';
-        } else {
-            return '99+次';
-        }
+    switchCategory: function (e) {
+        var category = e.currentTarget.dataset.category;
+        var filteredScenes = this.filterScenesByCategory(this.data.scenes, category);
+        this.setData({
+            currentCategory: category,
+            filteredScenes: filteredScenes
+        });
     },
     /**
      * 编辑场景
      */
-    editScene(e) {
-        const item = e.currentTarget.dataset.item;
-        
-        // 显示编辑对话框
+    editScene: function (e) {
+        var item = e.currentTarget.dataset.item;
         wx.showModal({
             title: '编辑场景',
-            editable: true,
-            placeholderText: '场景名称',
-            content: item.name,
-            success: (res) => {
-                if (res.confirm && res.content) {
-                    const newName = res.content.trim();
-                    if (newName && newName !== item.name) {
-                        // 调用存储服务更新场景
-                        const success = SceneStorageService.SceneStorageService.updateScene(item.id, {
-                            name: newName
-                        });
-                        
-                        if (success) {
-                            // 重新加载数据
-                            this.loadScenes();
-                        }
-                    } else if (newName === item.name) {
-                        wx.showToast({
-                            title: '名称未变化',
-                            icon: 'none'
-                        });
-                    }
-                }
-            }
+            content: "\u7F16\u8F91\u573A\u666F\u529F\u80FD\u6682\u672A\u5B9E\u73B0",
+            showCancel: false
         });
     },
-
     /**
      * 删除场景
      */
-    deleteScene(e) {
-        const item = e.currentTarget.dataset.item;
-        
+    deleteScene: function (e) {
+        var _this = this;
+        var item = e.currentTarget.dataset.item;
         wx.showModal({
             title: '确认删除',
-            content: `确定要删除场景"${item.name}"吗？`,
-            success: (res) => {
+            content: "\u786E\u5B9A\u8981\u5220\u9664\u573A\u666F\"".concat(item.name, "\"\u5417\uFF1F"),
+            success: function (res) {
                 if (res.confirm) {
-                    // 调用存储服务删除场景
-                    const success = SceneStorageService.SceneStorageService.deleteScene(item.id);
-                    
+                    var success = sceneStorageService_1.SceneStorageService.deleteScene(item.id);
                     if (success) {
                         // 重新加载数据
-                        this.loadScenes();
+                        _this.loadScenes();
                     }
                 }
             }
         });
     },
-
     /**
      * 添加新场景
      */
-    addScene() {
+    addScene: function () {
+        var _this = this;
         wx.showModal({
             title: '添加场景',
             editable: true,
             placeholderText: '请输入场景名称',
-            success: (res) => {
+            success: function (res) {
                 if (res.confirm && res.content) {
-                    const name = res.content.trim();
-                    if (name) {
-                        // 调用存储服务创建场景
-                        const success = SceneStorageService.SceneStorageService.createScene(name);
-                        
-                        if (success) {
-                            // 重新加载数据
-                            this.loadScenes();
-                        }
-                    } else {
-                        wx.showToast({
-                            title: '场景名称不能为空',
-                            icon: 'none'
-                        });
+                    var success = sceneStorageService_1.SceneStorageService.createScene(res.content, undefined);
+                    if (success) {
+                        // 重新加载数据
+                        _this.loadScenes();
                     }
                 }
             }
         });
     },
-    onShow() {
+    onShow: function () {
         this.loadScenes();
     }
 });

@@ -1,0 +1,156 @@
+.characters-container {
+  min-height: 100vh;
+  background: #f8f9fa;
+  padding-bottom: 140rpx;
+  box-sizing: border-box;
+}
+
+.page-header {
+  background: white;
+  padding: 32rpx 24rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  .page-title {
+    font-size: 36rpx;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+  }
+}
+
+.characters-list {
+  padding: 16rpx 0;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 40rpx;
+  text-align: center;
+
+  .empty-text {
+    font-size: 32rpx;
+    color: #999;
+    margin-bottom: 16rpx;
+  }
+
+  .empty-tip {
+    font-size: 26rpx;
+    color: #ccc;
+    line-height: 1.4;
+  }
+}
+
+.add-button {
+  position: fixed;
+  bottom: 40rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #4CAF50;
+  color: white;
+  border-radius: 50rpx;
+  padding: 24rpx 48rpx;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  box-shadow: 0 8rpx 24rpx rgba(76, 175, 80, 0.3);
+  z-index: 100;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &:active {
+    transform: translateX(-50%) scale(0.95);
+    box-shadow: 0 4rpx 12rpx rgba(76, 175, 80, 0.3);
+  }
+
+  .add-icon {
+    font-size: 36rpx;
+    font-weight: 300;
+    line-height: 1;
+  }
+
+  .add-text {
+    font-size: 28rpx;
+    font-weight: 500;
+  }
+}
+
+/* 小屏幕适配 */
+@media (max-width: 750rpx) {
+  .characters-container {
+    padding-bottom: 160rpx;
+  }
+
+  .page-header {
+    padding: 24rpx 20rpx;
+
+    .page-title {
+      font-size: 32rpx;
+    }
+  }
+
+  .characters-list {
+    padding: 12rpx 0;
+  }
+
+  .empty-state {
+    padding: 100rpx 30rpx;
+
+    .empty-text {
+      font-size: 28rpx;
+    }
+
+    .empty-tip {
+      font-size: 24rpx;
+    }
+  }
+
+  .add-button {
+    bottom: 30rpx;
+    padding: 20rpx 40rpx;
+
+    .add-icon {
+      font-size: 32rpx;
+    }
+
+    .add-text {
+      font-size: 26rpx;
+    }
+  }
+}
+
+/* 超小屏幕适配 */
+@media (max-width: 600rpx) {
+  .characters-container {
+    padding-bottom: 180rpx;
+  }
+
+  .page-header {
+    padding: 20rpx 16rpx;
+
+    .page-title {
+      font-size: 30rpx;
+    }
+  }
+
+  .add-button {
+    bottom: 20rpx;
+    padding: 18rpx 36rpx;
+    max-width: calc(100vw - 80rpx);
+
+    .add-icon {
+      font-size: 30rpx;
+    }
+
+    .add-text {
+      font-size: 24rpx;
+    }
+  }
+}

@@ -1,0 +1,57 @@
+<view class="scene-flows-container">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">MF路线管理</text>
+    <text class="page-subtitle">管理可复用的MF路线</text>
+  </view>
+
+  <!-- 流程列表 -->
+  <view class="scene-flows-list">
+    <view
+      wx:for="{{sceneFlows}}"
+      wx:key="id"
+      class="scene-flow-item"
+      bindtap="viewSceneFlow"
+      data-item="{{item}}"
+    >
+      <!-- 流程内容 -->
+      <view class="flow-content">
+        <view class="flow-info">
+          <view class="flow-header">
+            <text class="flow-name">{{item.name}}</text>
+            <view class="flow-badge {{item.isBuiltIn ? 'builtin' : 'custom'}}">
+              {{item.isBuiltIn ? '内置' : '自定义'}}
+            </view>
+          </view>
+          <view class="flow-scenes">
+            <text class="scenes-text">{{item.scenesPreview}}</text>
+            <text class="scenes-count">共{{item.sceneCount}}个场景</text>
+          </view>
+          <view class="flow-time">
+            <text class="time-text">更新于 {{item.updateTimeText}}</text>
+          </view>
+        </view>
+        <view class="flow-actions">
+          <view class="action-btn edit" catchtap="editSceneFlow" data-item="{{item}}">
+            <text class="btn-text">编辑</text>
+          </view>
+          <view class="action-btn delete" catchtap="deleteSceneFlow" data-item="{{item}}">
+            <text class="btn-text">删除</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:if="{{sceneFlows.length === 0}}" class="empty-state">
+    <text class="empty-text">暂无MF路线</text>
+    <text class="empty-tip">创建你的第一个MF路线</text>
+  </view>
+
+  <!-- 添加按钮 -->
+  <view class="add-button" bindtap="addSceneFlow">
+    <text class="add-icon">+</text>
+    <text class="add-text">新增路线</text>
+  </view>
+</view>

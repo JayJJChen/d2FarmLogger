@@ -1,13 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createSceneFlow = createSceneFlow;
-exports.validateSceneFlowName = validateSceneFlowName;
-exports.validateSceneFlowDescription = validateSceneFlowDescription;
-exports.validateSceneIds = validateSceneIds;
 /**
  * 创建场景流程对象
- * @param data 场景流程数据
- * @returns 完整的场景流程对象
+ * @param {any} data - 场景流程数据
+ * @returns {Object} 完整的场景流程对象
  */
 function createSceneFlow(data) {
     var sceneFlow = {
@@ -30,8 +26,8 @@ function createSceneFlow(data) {
 }
 /**
  * 验证场景流程名称
- * @param name 场景流程名称
- * @returns 是否有效
+ * @param {string} name - 场景流程名称
+ * @returns {boolean} 是否有效
  */
 function validateSceneFlowName(name) {
     if (!name || typeof name !== 'string') {
@@ -46,8 +42,8 @@ function validateSceneFlowName(name) {
 }
 /**
  * 验证场景流程描述
- * @param description 场景流程描述
- * @returns 是否有效
+ * @param {any} description - 场景流程描述
+ * @returns {boolean} 是否有效
  */
 function validateSceneFlowDescription(description) {
     if (description === undefined || description === null) {
@@ -63,8 +59,8 @@ function validateSceneFlowDescription(description) {
 }
 /**
  * 验证场景ID数组
- * @param sceneIds 场景ID数组
- * @returns 是否有效
+ * @param {any} sceneIds - 场景ID数组
+ * @returns {boolean} 是否有效
  */
 function validateSceneIds(sceneIds) {
     if (!Array.isArray(sceneIds)) {
@@ -84,3 +80,9 @@ function validateSceneIds(sceneIds) {
     }
     return true;
 }
+module.exports = {
+    createSceneFlow: createSceneFlow,
+    validateSceneFlowName: validateSceneFlowName,
+    validateSceneFlowDescription: validateSceneFlowDescription,
+    validateSceneIds: validateSceneIds
+};

@@ -1,27 +1,26 @@
-var SceneStorageService = require('../services/sceneStorageService');
-var ItemStorageService = require('../services/itemStorageService');
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var sceneStorageService_1 = require("../../services/sceneStorageService");
+var itemStorageService_1 = require("../../services/itemStorageService");
 Page({
     data: {
         sceneFlowsCount: 0,
         scenesCount: 0,
         itemsCount: 0
     },
-    onLoad() {
+    onLoad: function () {
         this.loadConfigurationData();
     },
     /**
      * 加载配置数据统计
      */
-    loadConfigurationData() {
+    loadConfigurationData: function () {
         // 初始化默认场景（如果需要）
-        SceneStorageService.SceneStorageService.initializeDefaultScenes();
-
+        sceneStorageService_1.SceneStorageService.initializeDefaultScenes();
         // 获取真实的场景和场景流程数量
-        var allScenes = SceneStorageService.SceneStorageService.getAllScenes();
-        var allSceneFlows = SceneStorageService.SceneStorageService.getAllSceneFlows();
-        var allItems = ItemStorageService.ItemStorageService.getAllItems();
-
+        var allScenes = sceneStorageService_1.SceneStorageService.getAllScenes();
+        var allSceneFlows = sceneStorageService_1.SceneStorageService.getAllSceneFlows();
+        var allItems = itemStorageService_1.ItemStorageService.getAllItems();
         this.setData({
             sceneFlowsCount: allSceneFlows.length,
             scenesCount: allScenes.length,
@@ -31,7 +30,7 @@ Page({
     /**
      * 导航到场景流程管理
      */
-    navigateToSceneFlows() {
+    navigateToSceneFlows: function () {
         wx.navigateTo({
             url: '/pages/configuration/scene-flows/scene-flows'
         });
@@ -39,7 +38,7 @@ Page({
     /**
      * 导航到场景库管理
      */
-    navigateToSceneLibrary() {
+    navigateToSceneLibrary: function () {
         wx.navigateTo({
             url: '/pages/configuration/scene-library/scene-library'
         });
@@ -47,12 +46,12 @@ Page({
     /**
      * 导航到物品库管理
      */
-    navigateToItemLibrary() {
+    navigateToItemLibrary: function () {
         wx.navigateTo({
             url: '/pages/configuration/item-library/item-library'
         });
     },
-    onShow() {
+    onShow: function () {
         // 每次显示页面时刷新数据统计
         this.loadConfigurationData();
     }
