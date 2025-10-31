@@ -1,3 +1,4 @@
+import { SceneStorageService } from '../../services/sceneStorageService'
 import { ItemStorageService } from '../../services/itemStorageService'
 
 interface ConfigurationData {
@@ -8,8 +9,8 @@ interface ConfigurationData {
 
 Page({
   data: {
-    sceneFlowsCount: 2,
-    scenesCount: 8,
+    sceneFlowsCount: 0,
+    scenesCount: 0,
     itemsCount: 0
   } as ConfigurationData,
 
@@ -21,12 +22,17 @@ Page({
    * 加载配置数据统计
    */
   loadConfigurationData() {
-    // 获取真实的物品数量（包括内置物品和用户物品）
+    // 初始化默认场景（如果需要）
+    SceneStorageService.initializeDefaultScenes()
+
+    // 获取真实的场景和场景流程数量
+    const allScenes = SceneStorageService.getAllScenes()
+    const allSceneFlows = SceneStorageService.getAllSceneFlows()
     const allItems = ItemStorageService.getAllItems()
 
     this.setData({
-      sceneFlowsCount: 2,  // TODO: 从实际存储服务获取
-      scenesCount: 8,     // TODO: 从实际存储服务获取
+      sceneFlowsCount: allSceneFlows.length,
+      scenesCount: allScenes.length,
       itemsCount: allItems.length
     })
   },

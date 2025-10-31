@@ -5,24 +5,10 @@
     <text class="page-subtitle">管理所有场景，用于组合成MF路线</text>
   </view>
 
-  <!-- 分类标签 -->
-  <view class="category-tabs">
-    <view
-      wx:for="{{categories}}"
-      wx:key="key"
-      class="category-tab {{currentCategory === item.key ? 'active' : ''}}"
-      bindtap="switchCategory"
-      data-category="{{item.key}}"
-    >
-      <text class="tab-text">{{item.name}}</text>
-      <text class="tab-count">({{item.count}})</text>
-    </view>
-  </view>
-
   <!-- 场景列表 -->
   <view class="scene-list">
     <view
-      wx:for="{{filteredScenes}}"
+      wx:for="{{scenes}}"
       wx:key="id"
       class="scene-item"
       data-index="{{index}}"
@@ -32,16 +18,11 @@
         <view class="scene-info">
           <view class="scene-header">
             <text class="scene-name">{{item.name}}</text>
-            <view class="scene-badge {{item.isBuiltIn ? 'builtin' : 'custom'}}">
-              {{item.isBuiltIn ? '内置' : '自定义'}}
-            </view>
           </view>
           <view wx:if="{{item.description}}" class="scene-description">
             <text class="desc-text">{{item.description}}</text>
           </view>
           <view class="scene-meta">
-            <text class="meta-text">{{item.categoryText}}</text>
-            <text class="meta-divider">•</text>
             <text class="meta-text">创建于 {{item.createTimeText}}</text>
           </view>
         </view>
@@ -58,9 +39,9 @@
   </view>
 
   <!-- 空状态 -->
-  <view wx:if="{{filteredScenes.length === 0}}" class="empty-state">
-    <text class="empty-text">该分类暂无场景</text>
-    <text class="empty-tip">添加自定义场景来丰富你的MF路线</text>
+  <view wx:if="{{scenes.length === 0}}" class="empty-state">
+    <text class="empty-text">暂无场景</text>
+    <text class="empty-tip">点击下方按钮添加场景</text>
   </view>
 
   <!-- 添加按钮 -->

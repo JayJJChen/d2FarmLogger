@@ -1,16 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-// Mock场景数据
-const mockScenes = {
-    'countess': '女伯爵',
-    'andariel': '安达利尔',
-    'summoner': '召唤者',
-    'nilathak': '尼拉塞克',
-    'mephisto': '墨菲斯托',
-    'diablo': '迪亚波罗',
-    'baal': '巴尔',
-    'pindleskin': 'P叔'
-};
+var SceneStorageService = require('../services/sceneStorageService');
 Page({
     data: {
         sceneFlows: []
@@ -22,54 +12,44 @@ Page({
      * 加载场景流程数据
      */
     loadSceneFlows() {
-        // Mock数据
-        const mockSceneFlows = [
-            {
-                id: '1',
-                name: 'Key Run',
-                sceneCount: 3,
-                isBuiltIn: true,
-                createTime: Date.now() - 7 * 24 * 60 * 60 * 1000,
-                updateTime: Date.now() - 2 * 24 * 60 * 60 * 1000
-            },
-            {
-                id: '2',
-                name: 'KM (仅墨菲斯托)',
-                sceneCount: 1,
-                isBuiltIn: true,
-                createTime: Date.now() - 7 * 24 * 60 * 60 * 1000,
-                updateTime: Date.now() - 3 * 24 * 60 * 60 * 1000
-            },
-            {
-                id: '3',
-                name: '85场景全刷',
-                sceneCount: 7,
-                isBuiltIn: false,
-                createTime: Date.now() - 5 * 24 * 60 * 60 * 1000,
-                updateTime: Date.now() - 1 * 24 * 60 * 60 * 1000
-            }
-        ];
-        // 添加场景预览和时间格式化
-        const processedSceneFlows = mockSceneFlows.map(flow => {
-            let scenesPreview = '';
-            if (flow.id === '1') {
-                scenesPreview = '女伯爵 → 召唤者 → 尼拉塞克';
-            }
-            else if (flow.id === '2') {
-                scenesPreview = '墨菲斯托';
-            }
-            else if (flow.id === '3') {
-                scenesPreview = '女伯爵 → 安达利尔 → 召唤者 → 尼拉塞克 → 墨菲斯托 → 迪亚波罗 → 巴尔';
-            }
-            return {
-                ...flow,
-                scenesPreview: scenesPreview,
-                updateTimeText: this.formatTime(flow.updateTime)
-            };
-        });
-        this.setData({
-            sceneFlows: processedSceneFlows
-        });
+        try {
+            // 从存储服务获取场景流程数据
+            const sceneFlows = SceneStorageService.SceneStorageService.getAllSceneFlows();
+            const allScenes = SceneStorageService.SceneStorageService.getAllScenes();
+            
+            // 创建场景ID到名称的映射
+            const sceneMap = {};
+            allScenes.forEach(scene => {
+                sceneMap[scene.id] = scene.name;
+            });
+            
+            // 添加场景预览和时间格式化
+            const processedSceneFlows = sceneFlows.map(flow => {
+                // 生成场景预览文本
+                const scenesPreview = flow.sceneIds.map(sceneId => {
+                    return sceneMap[sceneId] || '未知场景';
+                }).join(' → ');
+                
+                return {
+                    ...flow,
+                    sceneCount: flow.sceneIds.length,
+                    scenesPreview: scenesPreview,
+                    updateTimeText: this.formatTime(flow.updateTime),
+                    createTimeText: this.formatTime(flow.createTime),
+                    usageCountText: this.getUsageCountText(flow.usageCount)
+                };
+            });
+            
+            this.setData({
+                sceneFlows: processedSceneFlows
+            });
+        } catch (error) {
+            console.error('加载场景流程数据失败:', error);
+            wx.showToast({
+                title: '加载数据失败',
+                icon: 'none'
+            });
+        }
     },
     /**
      * 格式化时间
@@ -97,64 +77,160 @@ Page({
             return (date.getMonth() + 1) + '月' + date.getDate() + '日';
         }
     },
+
+    /**
+     * 格式化使用次数
+     */
+    getUsageCountText(count) {
+        if (count === 0) {
+            return '未使用';
+        } else if (count < 10) {
+            return count + '次';
+        } else if (count < 100) {
+            return count + '次';
+        } else {
+            return '99+次';
+        }
+    },
     /**
      * 查看场景流程详情
      */
     viewSceneFlow(e) {
         const item = e.currentTarget.dataset.item;
-        wx.showToast({
-            title: `查看流程: ${item.name}`,
-            icon: 'none'
+        
+        // 获取所有场景信息
+        const allScenes = SceneStorageService.SceneStorageService.getAllScenes();
+        const sceneMap = {};
+        allScenes.forEach(scene => {
+            sceneMap[scene.id] = scene.name;
+        });
+        
+        // 生成详细信息
+        const sceneDetails = item.sceneIds.map(sceneId => {
+            return sceneMap[sceneId] || '未知场景';
+        }).join('\n');
+        
+        wx.showModal({
+            title: `流程详情: ${item.name}`,
+            content: `包含场景:\n${sceneDetails}\n\n使用次数: ${item.usageCountText}\n创建时间: ${item.createTimeText}`,
+            showCancel: false,
+            confirmText: '确定'
         });
     },
+
     /**
      * 编辑场景流程
      */
     editSceneFlow(e) {
         const item = e.currentTarget.dataset.item;
-        wx.showToast({
-            title: `编辑流程: ${item.name}`,
-            icon: 'none'
+        
+        // 显示编辑对话框
+        wx.showModal({
+            title: '编辑流程',
+            editable: true,
+            placeholderText: '流程名称',
+            content: item.name,
+            success: (res) => {
+                if (res.confirm && res.content) {
+                    const newName = res.content.trim();
+                    if (newName && newName !== item.name) {
+                        // 调用存储服务更新场景流程
+                        const success = SceneStorageService.SceneStorageService.updateSceneFlow(item.id, {
+                            name: newName
+                        });
+                        
+                        if (success) {
+                            // 重新加载数据
+                            this.loadSceneFlows();
+                        }
+                    } else if (newName === item.name) {
+                        wx.showToast({
+                            title: '名称未变化',
+                            icon: 'none'
+                        });
+                    }
+                }
+            }
         });
     },
+
     /**
      * 删除场景流程
      */
     deleteSceneFlow(e) {
         const item = e.currentTarget.dataset.item;
-        const index = this.data.sceneFlows.findIndex(flow => flow.id === item.id);
-        if (item.isBuiltIn) {
-            wx.showToast({
-                title: '内置流程不能删除',
-                icon: 'none'
-            });
-            return;
-        }
+        
         wx.showModal({
             title: '确认删除',
             content: `确定要删除流程"${item.name}"吗？`,
             success: (res) => {
                 if (res.confirm) {
-                    const sceneFlows = this.data.sceneFlows;
-                    sceneFlows.splice(index, 1);
-                    this.setData({
-                        sceneFlows: sceneFlows
-                    });
-                    wx.showToast({
-                        title: '删除成功',
-                        icon: 'success'
-                    });
+                    // 调用存储服务删除场景流程
+                    const success = SceneStorageService.SceneStorageService.deleteSceneFlow(item.id);
+                    
+                    if (success) {
+                        // 重新加载数据
+                        this.loadSceneFlows();
+                    }
                 }
             }
         });
     },
+
     /**
      * 添加新场景流程
      */
     addSceneFlow() {
-        wx.showToast({
-            title: '新增流程功能开发中',
-            icon: 'none'
+        // 获取所有可用场景
+        const allScenes = SceneStorageService.SceneStorageService.getAllScenes();
+        
+        if (allScenes.length === 0) {
+            wx.showToast({
+                title: '请先添加场景',
+                icon: 'none'
+            });
+            return;
+        }
+        
+        // 显示场景选择列表
+        const sceneNames = allScenes.map(scene => scene.name);
+        wx.showActionSheet({
+            itemList: sceneNames,
+            success: (res) => {
+                if (!res.cancel) {
+                    const selectedScenes = [allScenes[res.tapIndex].id];
+                    
+                    // 显示流程名称输入对话框
+                    wx.showModal({
+                        title: '添加流程',
+                        editable: true,
+                        placeholderText: '请输入流程名称',
+                        content: '',
+                        success: (nameRes) => {
+                            if (nameRes.confirm && nameRes.content) {
+                                const flowName = nameRes.content.trim();
+                                if (flowName) {
+                                    // 调用存储服务创建场景流程
+                                    const success = SceneStorageService.SceneStorageService.createSceneFlow(
+                                        flowName,
+                                        selectedScenes
+                                    );
+                                    
+                                    if (success) {
+                                        // 重新加载数据
+                                        this.loadSceneFlows();
+                                    }
+                                } else {
+                                    wx.showToast({
+                                        title: '流程名称不能为空',
+                                        icon: 'none'
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }
+            }
         });
     },
     onShow() {

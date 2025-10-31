@@ -1,8 +1,11 @@
+var SceneStorageService = require('../services/sceneStorageService');
+var ItemStorageService = require('../services/itemStorageService');
+
 Page({
     data: {
-        sceneFlowsCount: 2,
-        scenesCount: 8,
-        itemsCount: 15
+        sceneFlowsCount: 0,
+        scenesCount: 0,
+        itemsCount: 0
     },
     onLoad() {
         this.loadConfigurationData();
@@ -11,12 +14,18 @@ Page({
      * 加载配置数据统计
      */
     loadConfigurationData() {
-        // TODO: 实际从存储服务获取数据
-        // 这里使用Mock数据
+        // 初始化默认场景（如果需要）
+        SceneStorageService.SceneStorageService.initializeDefaultScenes();
+
+        // 获取真实的场景和场景流程数量
+        var allScenes = SceneStorageService.SceneStorageService.getAllScenes();
+        var allSceneFlows = SceneStorageService.SceneStorageService.getAllSceneFlows();
+        var allItems = ItemStorageService.ItemStorageService.getAllItems();
+
         this.setData({
-            sceneFlowsCount: 2,
-            scenesCount: 8,
-            itemsCount: 15
+            sceneFlowsCount: allSceneFlows.length,
+            scenesCount: allScenes.length,
+            itemsCount: allItems.length
         });
     },
     /**

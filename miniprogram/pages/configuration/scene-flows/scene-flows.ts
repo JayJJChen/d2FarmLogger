@@ -1,7 +1,7 @@
-import { SceneFlowItem } from '../../../models/scene-flow'
+import { SceneFlow } from '../../../models/scene-flow'
 
 interface SceneFlowsData {
-  sceneFlows: SceneFlowItem[]
+  sceneFlows: SceneFlow[]
 }
 
 // Mock场景数据
@@ -30,28 +30,34 @@ Page({
    */
   loadSceneFlows() {
     // Mock数据
-    const mockSceneFlows: SceneFlowItem[] = [
+    const mockSceneFlows: SceneFlow[] = [
       {
         id: '1',
         name: 'Key Run',
+        sceneIds: ['countess', 'summoner', 'nilathak'],
         sceneCount: 3,
         isBuiltIn: true,
+        usageCount: 0,
         createTime: Date.now() - 7 * 24 * 60 * 60 * 1000,
         updateTime: Date.now() - 2 * 24 * 60 * 60 * 1000
       },
       {
         id: '2',
         name: 'KM (仅墨菲斯托)',
+        sceneIds: ['mephisto'],
         sceneCount: 1,
         isBuiltIn: true,
+        usageCount: 0,
         createTime: Date.now() - 7 * 24 * 60 * 60 * 1000,
         updateTime: Date.now() - 3 * 24 * 60 * 60 * 1000
       },
       {
         id: '3',
         name: '85场景全刷',
+        sceneIds: ['countess', 'andariel', 'summoner', 'nilathak', 'mephisto', 'diablo', 'baal'],
         sceneCount: 7,
         isBuiltIn: false,
+        usageCount: 0,
         createTime: Date.now() - 5 * 24 * 60 * 60 * 1000,
         updateTime: Date.now() - 1 * 24 * 60 * 60 * 1000
       }
