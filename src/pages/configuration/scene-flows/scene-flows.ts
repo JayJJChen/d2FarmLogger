@@ -138,7 +138,14 @@ Page({
    */
   deleteSceneFlow(e: any) {
     const item = e.currentTarget.dataset.item
-    const index = this.data.sceneFlows.findIndex(flow => flow.id === item.id)
+    // 使用ES5兼容的方式查找索引
+    var index = -1
+    for (var i = 0; i < this.data.sceneFlows.length; i++) {
+      if (this.data.sceneFlows[i].id === item.id) {
+        index = i
+        break
+      }
+    }
 
     if (item.isBuiltIn) {
       wx.showToast({

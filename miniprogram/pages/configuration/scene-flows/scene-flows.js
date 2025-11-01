@@ -137,7 +137,14 @@ Page({
     deleteSceneFlow: function (e) {
         var _this = this;
         var item = e.currentTarget.dataset.item;
-        var index = this.data.sceneFlows.findIndex(function (flow) { return flow.id === item.id; });
+        // 使用ES5兼容的方式查找索引
+        var index = -1;
+        for (var i = 0; i < this.data.sceneFlows.length; i++) {
+            if (this.data.sceneFlows[i].id === item.id) {
+                index = i;
+                break;
+            }
+        }
         if (item.isBuiltIn) {
             wx.showToast({
                 title: '内置流程不能删除',

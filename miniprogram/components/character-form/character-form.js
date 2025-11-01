@@ -16,7 +16,14 @@ Component({
             value: null,
             observer: function (newVal) {
                 if (newVal && this.data.editMode) {
-                    var classIndex = this.data.classOptions.findIndex(function (option) { return option.value === newVal.class; });
+                    // 使用ES5兼容的方式查找索引
+                    var classIndex = -1;
+                    for (var i = 0; i < this.data.classOptions.length; i++) {
+                        if (this.data.classOptions[i].value === newVal.class) {
+                            classIndex = i;
+                            break;
+                        }
+                    }
                     this.setData({
                         formData: {
                             name: newVal.name || '',
