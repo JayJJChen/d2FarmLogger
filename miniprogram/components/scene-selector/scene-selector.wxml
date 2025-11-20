@@ -1,0 +1,96 @@
+<view class="modal-overlay" wx:if="{{visible}}" bindtap="onCancel">
+  <view class="modal-content scene-selector" catchtap="">
+    <view class="modal-header">
+      <text class="modal-title">选择场景</text>
+    </view>
+
+    <view class="modal-body">
+      <!-- 搜索框 -->
+      <view class="search-section">
+        <input
+          class="search-input"
+          placeholder="搜索场景名称"
+          value="{{searchKeyword}}"
+          bindinput="onSearchInput"
+        />
+      </view>
+
+      <!-- 已选择的场景预览 -->
+      <view class="selected-preview">
+        <text class="preview-label">已选择 {{selectedScenes.length}} 个场景</text>
+        <text class="preview-text">{{generatePreviewText()}}</text>
+      </view>
+
+      <!-- 已选择的场景列表 -->
+      <view class="selected-scenes" wx:if="{{selectedScenes.length > 0}}">
+        <text class="section-title">已选择场景（点击可取消）</text>
+        <view class="selected-list">
+          <view
+            class="selected-item"
+            wx:for="{{selectedScenes}}"
+            wx:key="id"
+            bindtap="onSceneTap"
+            data-scene-id="{{item.id}}"
+            data-scene-name="{{item.name}}"
+          >
+            <view class="scene-index">{{item.index}}</view>
+            <view class="scene-info">
+              <text class="scene-name">{{item.name}}</text>
+            </view>
+            <view class="scene-actions">
+              <button
+                class="action-btn move-up"
+                wx:if="{{index > 0}}"
+                bindtap="onMoveUp"
+                data-index="{{index}}"
+                catchtap=""
+              >↑</button>
+              <button
+                class="action-btn move-down"
+                wx:if="{{index < selectedScenes.length - 1}}"
+                bindtap="onMoveDown"
+                data-index="{{index}}"
+                catchtap=""
+              >↓</button>
+            </view>
+          </view>
+        </view>
+        <button class="clear-btn" bindtap="onClear">清空选择</button>
+      </view>
+
+      <!-- 可选择的场景列表 -->
+      <view class="available-scenes">
+        <text class="section-title">可选择场景</text>
+        <scroll-view class="scene-list" scroll-y="true">
+          <view
+            class="scene-item {{isSceneSelected(item.id) ? 'selected' : ''}}"
+            wx:for="{{getFilteredScenes()}}"
+            wx:key="id"
+            bindtap="onSceneTap"
+            data-scene-id="{{item.id}}"
+            data-scene-name="{{item.name}}"
+          >
+            <view class="scene-info">
+              <text class="scene-name">{{item.name}}</text>
+              <text class="scene-desc" wx:if="{{item.description}}">{{item.description}}</text>
+            </view>
+            <view class="scene-status">
+              <text wx:if="{{isSceneSelected(item.id)}}" class="selected-text">已选择</text>
+            </view>
+          </view>
+
+          <view class="empty-state" wx:if="{{getFilteredScenes().length === 0}}">
+            <text class="empty-text">{{searchKeyword ? '没有找到匹配的场景' : '没有更多可选场景'}}</text>
+          </view>
+        </scroll-view>
+      </view>
+    </view>
+
+    <view class="modal-footer">
+      <button class="btn btn-cancel" bindtap="onCancel">取消</button>
+      <button class="btn btn-submit" bindtap="onConfirm" disabled="{{selectedScenes.length === 0}}">
+        确认选择 ({{selectedScenes.length}})
+      </button>
+    </view>
+  </view>
+</view>

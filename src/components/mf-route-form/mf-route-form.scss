@@ -1,0 +1,325 @@
+// MF路线表单样式
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  padding: 20px;
+  border-bottom: 1px solid #f0f0f0;
+  text-align: center;
+
+  .modal-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+  }
+}
+
+.modal-body {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.form-item {
+  margin-bottom: 20px;
+
+  .form-label {
+    display: block;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .form-input {
+    width: 100%;
+    height: 44px;
+    padding: 0 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    background: #fff;
+    box-sizing: border-box;
+
+    &:focus {
+      border-color: #007aff;
+      outline: none;
+    }
+
+    &::placeholder {
+      color: #999;
+    }
+  }
+
+  .form-textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    background: #fff;
+    box-sizing: border-box;
+    resize: none;
+    line-height: 1.4;
+
+    &:focus {
+      border-color: #007aff;
+      outline: none;
+    }
+
+    &::placeholder {
+      color: #999;
+    }
+  }
+}
+
+// 表单提示
+.form-hint {
+  display: block;
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+// 场景选择区域
+.scene-selection-area {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  max-height: 200px;
+  overflow-y: auto;
+
+  .scene-list {
+    .scene-item {
+      display: flex;
+      align-items: center;
+      padding: 8px 10px;
+      border-bottom: 1px solid #f0f0f0;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      min-height: 44px;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:hover {
+        background: #f8f9fa;
+      }
+
+      &.selected {
+        background: #e3f2fd;
+        border-color: #007aff;
+      }
+
+      .scene-info {
+        flex: 1;
+        padding-right: 8px;
+
+        .scene-name {
+          font-size: 13px;
+          color: #333;
+          font-weight: 500;
+          display: block;
+          margin-bottom: 1px;
+        }
+
+        .scene-description {
+          font-size: 11px;
+          color: #666;
+          display: block;
+          line-height: 1.2;
+          // 限制描述文本行数
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+        }
+      }
+
+      .scene-order {
+        width: 24px;
+        height: 24px;
+        background: #007aff;
+        color: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 600;
+        flex-shrink: 0;
+      }
+    }
+  }
+}
+
+// 已选择场景序列
+.selected-scenes-sequence {
+  margin-top: 16px;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  background: #f8f9fa;
+  overflow: hidden;
+
+  .sequence-header {
+    padding: 12px 16px;
+    background: #e9ecef;
+    border-bottom: 1px solid #dee2e6;
+
+    .sequence-title {
+      font-size: 14px;
+      color: #333;
+      font-weight: 500;
+    }
+  }
+
+  .sequence-list {
+    .sequence-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid #e9ecef;
+      position: relative;
+
+      &:last-child {
+        border-bottom: none;
+
+        .sequence-arrow {
+          display: none;
+        }
+      }
+
+      .sequence-number {
+        width: 24px;
+        height: 24px;
+        background: #007aff;
+        color: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 600;
+        margin-right: 12px;
+        flex-shrink: 0;
+      }
+
+      .sequence-name {
+        flex: 1;
+        font-size: 14px;
+        color: #333;
+      }
+
+      .sequence-controls {
+        display: flex;
+        gap: 4px;
+        margin-right: 12px;
+
+        .control-btn {
+          width: 28px;
+          height: 28px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          background: #fff;
+          color: #666;
+          font-size: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.2s ease;
+
+          &:hover:not(.disabled) {
+            background: #f8f9fa;
+            border-color: #007aff;
+            color: #007aff;
+          }
+
+          &.disabled {
+            background: #f8f9fa;
+            color: #ccc;
+            border-color: #e9ecef;
+            cursor: not-allowed;
+          }
+        }
+      }
+
+      .sequence-arrow {
+        font-size: 16px;
+        color: #666;
+        position: absolute;
+        right: 16px;
+        bottom: -12px;
+        background: #f8f9fa;
+        padding: 0 4px;
+      }
+    }
+  }
+}
+
+.modal-footer {
+  padding: 16px 20px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+
+  .btn {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    min-width: 80px;
+
+    &.btn-cancel {
+      background: #f8f9fa;
+      color: #666;
+      border: 1px solid #ddd;
+
+      &:hover {
+        background: #e9ecef;
+      }
+    }
+
+    &.btn-submit {
+      background: #007aff;
+      color: #fff;
+
+      &:hover {
+        background: #0056b3;
+      }
+
+      &:active {
+        background: #004494;
+      }
+    }
+  }
+}

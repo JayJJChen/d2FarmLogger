@@ -28,7 +28,7 @@ Page({
     loadScenes: function () {
         var _this = this;
         // 初始化默认场景（如果需要）
-        sceneStorageService_1.SceneStorageService.initializeDefaultScenes();
+        sceneStorageService_1.SceneStorageService.initializeScenes();
         // 从存储获取场景数据
         var scenes = sceneStorageService_1.SceneStorageService.getAllScenes();
         // 添加分类和时间格式化

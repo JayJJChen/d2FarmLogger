@@ -1,15 +1,16 @@
 import { SceneStorageService } from '../../services/sceneStorageService'
 var { ItemStorageService } = require('../../services/itemStorageService')
+var { MFRouteStorageService } = require('../../services/mfRouteStorageService')
 
 interface ConfigurationData {
-  sceneFlowsCount: number
+  mfRoutesCount: number
   scenesCount: number
   itemsCount: number
 }
 
 Page({
   data: {
-    sceneFlowsCount: 0,
+    mfRoutesCount: 0,
     scenesCount: 0,
     itemsCount: 0
   } as ConfigurationData,
@@ -23,22 +24,23 @@ Page({
    */
   loadConfigurationData() {
     // 初始化默认场景（如果需要）
-    SceneStorageService.initializeDefaultScenes()
+    SceneStorageService.initializeScenes()
+    MFRouteStorageService.initializeRoutes()
 
-    // 获取真实的场景和场景流程数量
+    // 获取真实的场景、MF路线和物品数量
     const allScenes = SceneStorageService.getAllScenes()
-    const allSceneFlows = SceneStorageService.getAllSceneFlows()
+    const allMFRoutes = MFRouteStorageService.getAllRoutes()
     const allItems = ItemStorageService.getAllItems()
 
     this.setData({
-      sceneFlowsCount: allSceneFlows.length,
+      mfRoutesCount: allMFRoutes.length,
       scenesCount: allScenes.length,
       itemsCount: allItems.length
     })
   },
 
   /**
-   * 导航到场景流程管理
+   * 导航到MF路线管理
    */
   navigateToSceneFlows() {
     wx.navigateTo({

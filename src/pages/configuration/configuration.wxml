@@ -17,7 +17,7 @@
         <view class="card-arrow">›</view>
       </view>
       <view class="card-footer">
-        <text class="card-count">{{sceneFlowsCount}} 个路线</text>
+        <text class="card-count">{{mfRoutesCount}} 个路线</text>
       </view>
     </view>
 

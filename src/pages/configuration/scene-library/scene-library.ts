@@ -25,7 +25,7 @@ Page({
    */
   loadScenes() {
     // 初始化默认场景（如果需要）
-    SceneStorageService.initializeDefaultScenes()
+    SceneStorageService.initializeScenes()
 
     // 从存储获取场景数据
     const scenes = SceneStorageService.getAllScenes()

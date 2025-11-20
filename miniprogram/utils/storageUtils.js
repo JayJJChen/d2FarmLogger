@@ -1,5 +1,19 @@
+"use strict";
 // 存储工具函数
 // 提供ES5兼容的存储操作工具
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deepClone = deepClone;
+exports.safeJSONStringify = safeJSONStringify;
+exports.safeJSONParse = safeJSONParse;
+exports.checkStorageSpace = checkStorageSpace;
+exports.getDataSize = getDataSize;
+exports.cleanExpiredData = cleanExpiredData;
+exports.formatFileSize = formatFileSize;
+exports.generateUniqueId = generateUniqueId;
+exports.safeSetStorage = safeSetStorage;
+exports.safeGetStorage = safeGetStorage;
+exports.safeRemoveStorage = safeRemoveStorage;
+exports.extendObject = extendObject;
 /**
  * 深度克隆对象（ES5兼容版本）
  * @param {any} obj - 要克隆的对象
@@ -218,16 +232,19 @@ function safeRemoveStorage(key) {
         return false;
     }
 }
-module.exports = {
-    deepClone: deepClone,
-    safeJSONStringify: safeJSONStringify,
-    safeJSONParse: safeJSONParse,
-    checkStorageSpace: checkStorageSpace,
-    getDataSize: getDataSize,
-    cleanExpiredData: cleanExpiredData,
-    formatFileSize: formatFileSize,
-    generateUniqueId: generateUniqueId,
-    safeSetStorage: safeSetStorage,
-    safeGetStorage: safeGetStorage,
-    safeRemoveStorage: safeRemoveStorage
-};
+/**
+ * 对象合并（ES5兼容版本）
+ * @param {Object} target - 目标对象
+ * @param {Object} source - 源对象
+ * @returns {Object} 合并后的对象
+ */
+function extendObject(target, source) {
+    target = target || {};
+    source = source || {};
+    for (var key in source) {
+        if (source.hasOwnProperty(key)) {
+            target[key] = source[key];
+        }
+    }
+    return target;
+}

@@ -62,27 +62,8 @@ if (scenesAfterCreate.length > 0) {
   console.log('第一个场景:', scenesAfterCreate[0]);
 }
 
-// 测试4: 创建场景流程
-console.log('\n4. 测试创建场景流程:');
-if (scenesAfterCreate.length > 0) {
-  const flowResult = SceneStorageService.SceneStorageService.createSceneFlow(
-    '测试流程',
-    [scenesAfterCreate[0].id],
-    '这是一个测试流程'
-  );
-  console.log('创建流程结果:', flowResult);
-}
-
-// 测试5: 获取所有场景流程
-console.log('\n5. 测试获取所有场景流程:');
-const flows = SceneStorageService.SceneStorageService.getAllSceneFlows();
-console.log('流程数量:', flows.length);
-if (flows.length > 0) {
-  console.log('第一个流程:', flows[0]);
-}
-
-// 测试6: 更新场景
-console.log('\n6. 测试更新场景:');
+// 测试4: 更新场景
+console.log('\n4. 测试更新场景:');
 if (scenesAfterCreate.length > 0) {
   const updateResult = SceneStorageService.SceneStorageService.updateScene(
     scenesAfterCreate[0].id,
@@ -91,18 +72,16 @@ if (scenesAfterCreate.length > 0) {
   console.log('更新结果:', updateResult);
 }
 
-// 测试7: 删除场景流程
-console.log('\n7. 测试删除场景流程:');
-if (flows.length > 0) {
-  const deleteFlowResult = SceneStorageService.SceneStorageService.deleteSceneFlow(flows[0].id);
-  console.log('删除流程结果:', deleteFlowResult);
+// 测试5: 删除场景
+console.log('\n5. 测试删除场景:');
+if (scenesAfterCreate.length > 0) {
+  const deleteResult = SceneStorageService.SceneStorageService.deleteScene(scenesAfterCreate[0].id);
+  console.log('删除结果:', deleteResult);
 }
 
-// 测试8: 最终检查
-console.log('\n8. 最终检查:');
+// 测试6: 最终检查
+console.log('\n6. 最终检查:');
 const finalScenes = SceneStorageService.SceneStorageService.getAllScenes();
-const finalFlows = SceneStorageService.SceneStorageService.getAllSceneFlows();
 console.log('最终场景数量:', finalScenes.length);
-console.log('最终流程数量:', finalFlows.length);
 
 console.log('\n=== 测试完成 ===');

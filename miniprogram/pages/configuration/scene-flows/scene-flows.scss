@@ -163,6 +163,36 @@
   }
 }
 
+.clear-button {
+  position: fixed;
+  bottom: 120rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ff4757;
+  color: white;
+  border-radius: 40rpx;
+  padding: 16rpx 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6rpx 20rpx rgba(255, 71, 87, 0.3);
+  z-index: 99;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &:active {
+    transform: translateX(-50%) scale(0.95);
+    box-shadow: 0 3rpx 10rpx rgba(255, 71, 87, 0.3);
+  }
+
+  .clear-text {
+    font-size: 24rpx;
+    font-weight: 500;
+  }
+}
+
 .add-button {
   position: fixed;
   bottom: 40rpx;

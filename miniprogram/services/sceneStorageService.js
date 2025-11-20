@@ -24,110 +24,23 @@ var SceneStorageService = {
     _storageUtils: StorageUtils,
     // ==================== 场景相关方法 ====================
     /**
-     * 初始化默认场景（如果存储为空）
+     * 初始化场景存储（不包含默认场景）
      * @returns {boolean} 初始化是否成功
      */
-    initializeDefaultScenes: function () {
+    initializeScenes: function () {
         try {
             // 检查是否已有场景数据
             var existingScenes = this.getAllScenes();
             if (existingScenes.length > 0) {
                 return true; // 已有数据，无需初始化
             }
-            // 默认场景数据
-            var defaultScenes = [
-                {
-                    id: 'countess',
-                    name: '女伯爵',
-                    description: '遗忘之塔第5层，刷符文和钥匙',
-                    isBuiltIn: true,
-                    usageCount: 0
-                },
-                {
-                    id: 'andariel',
-                    name: '安达利尔',
-                    description: '洞穴第4层，早期刷装备',
-                    isBuiltIn: true,
-                    usageCount: 0
-                },
-                {
-                    id: 'summoner',
-                    name: '召唤者',
-                    description: '召唤者圣堂，刷符文和装备',
-                    isBuiltIn: true,
-                    usageCount: 0
-                },
-                {
-                    id: 'nilathak',
-                    name: '尼拉塞克',
-                    description: '神殿之王神殿，刷精华和钥匙',
-                    isBuiltIn: true,
-                    usageCount: 0
-                },
-                {
-                    id: 'mephisto',
-                    name: '墨菲斯托',
-                    description: '憎恨的囚牢第3层，KM首选',
-                    isBuiltIn: true,
-                    usageCount: 0
-                },
-                {
-                    id: 'diablo',
-                    name: '迪亚波罗',
-                    description: '混沌避难所，刷暗金和套装',
-                    isBuiltIn: true,
-                    usageCount: 0
-                },
-                {
-                    id: 'baal',
-                    name: '巴尔',
-                    description: '世界之石要塞第2层，终极Boss',
-                    isBuiltIn: true,
-                    usageCount: 0
-                },
-                {
-                    id: 'pindleskin',
-                    name: 'P叔',
-                    description: '尼拉塞克附近的超级小怪',
-                    isBuiltIn: true,
-                    usageCount: 0
-                },
-                {
-                    id: 'baal-minions',
-                    name: '巴尔前小怪',
-                    description: '巴尔召唤的5波小怪群',
-                    isBuiltIn: false,
-                    usageCount: 0
-                },
-                {
-                    id: 'cows',
-                    name: '奶牛场',
-                    description: '秘密奶牛关卡，刷装备和符文',
-                    isBuiltIn: false,
-                    usageCount: 0
-                },
-                {
-                    id: 'pits',
-                    name: '地穴',
-                    description: '泰摩高地地穴，85场景',
-                    isBuiltIn: false,
-                    usageCount: 0
-                }
-            ];
-            // 创建场景对象
-            var scenes = defaultScenes.map(function (sceneData) {
-                return SceneUtils.createScene(sceneData);
-            });
-            // 保存到存储
-            var success = this.saveUserScenes(scenes);
-            if (success) {
-                this.updateDataVersion();
-                console.log('默认场景初始化成功，共', scenes.length, '个场景');
-            }
-            return success;
+            // 场景存储已准备好，用户可以创建自定义场景
+            this.updateDataVersion();
+            console.log('场景存储初始化成功');
+            return true;
         }
         catch (error) {
-            console.error('初始化默认场景失败:', error);
+            console.error('初始化场景存储失败:', error);
             return false;
         }
     },
@@ -757,6 +670,21 @@ var SceneStorageService = {
      */
     checkStorageSpace: function () {
         return StorageUtils.checkStorageSpace();
+    },
+    /**
+     * 清空所有场景流程数据（仅清理流程，保留场景）
+     * @returns {boolean} 是否清空成功
+     */
+    clearSceneFlows: function () {
+        try {
+            wx.removeStorageSync(STORAGE_KEYS.SCENE_FLOWS);
+            this.updateDataVersion();
+            return true;
+        }
+        catch (error) {
+            console.error('清空场景流程数据失败:', error);
+            return false;
+        }
     },
     /**
      * 清空所有场景数据

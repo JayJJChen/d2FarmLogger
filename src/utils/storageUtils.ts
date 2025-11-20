@@ -228,16 +228,35 @@ function safeRemoveStorage(key) {
   }
 }
 
-module.exports = {
-  deepClone: deepClone,
-  safeJSONStringify: safeJSONStringify,
-  safeJSONParse: safeJSONParse,
-  checkStorageSpace: checkStorageSpace,
-  getDataSize: getDataSize,
-  cleanExpiredData: cleanExpiredData,
-  formatFileSize: formatFileSize,
-  generateUniqueId: generateUniqueId,
-  safeSetStorage: safeSetStorage,
-  safeGetStorage: safeGetStorage,
-  safeRemoveStorage: safeRemoveStorage
+/**
+ * 对象合并（ES5兼容版本）
+ * @param {Object} target - 目标对象
+ * @param {Object} source - 源对象
+ * @returns {Object} 合并后的对象
+ */
+function extendObject(target, source) {
+  target = target || {}
+  source = source || {}
+
+  for (var key in source) {
+    if (source.hasOwnProperty(key)) {
+      target[key] = source[key]
+    }
+  }
+  return target
+}
+
+export {
+  deepClone,
+  safeJSONStringify,
+  safeJSONParse,
+  checkStorageSpace,
+  getDataSize,
+  cleanExpiredData,
+  formatFileSize,
+  generateUniqueId,
+  safeSetStorage,
+  safeGetStorage,
+  safeRemoveStorage,
+  extendObject
 }

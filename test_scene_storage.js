@@ -21,23 +21,14 @@ if (scenesAfterCreate.length > 0) {
   console.log('第一个场景:', scenesAfterCreate[0]);
 }
 
-// 测试4: 创建场景流程
-console.log('\n4. 测试创建场景流程:');
+// 测试4: 更新场景
+console.log('\n4. 测试更新场景:');
 if (scenesAfterCreate.length > 0) {
-  const flowResult = SceneStorageService.SceneStorageService.createSceneFlow(
-    '测试流程',
-    [scenesAfterCreate[0].id],
-    '这是一个测试流程'
+  const updateResult = SceneStorageService.SceneStorageService.updateScene(
+    scenesAfterCreate[0].id,
+    { name: '更新后的场景名称', description: '更新后的描述' }
   );
-  console.log('创建流程结果:', flowResult);
-}
-
-// 测试5: 获取所有场景流程
-console.log('\n5. 测试获取所有场景流程:');
-const flows = SceneStorageService.SceneStorageService.getAllSceneFlows();
-console.log('流程数量:', flows.length);
-if (flows.length > 0) {
-  console.log('第一个流程:', flows[0]);
+  console.log('更新结果:', updateResult);
 }
 
 console.log('\n=== 测试完成 ===');

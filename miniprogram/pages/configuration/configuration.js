@@ -2,9 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var sceneStorageService_1 = require("../../services/sceneStorageService");
 var ItemStorageService = require('../../services/itemStorageService').ItemStorageService;
+var MFRouteStorageService = require('../../services/mfRouteStorageService').MFRouteStorageService;
 Page({
     data: {
-        sceneFlowsCount: 0,
+        mfRoutesCount: 0,
         scenesCount: 0,
         itemsCount: 0
     },
@@ -16,19 +17,20 @@ Page({
      */
     loadConfigurationData: function () {
         // 初始化默认场景（如果需要）
-        sceneStorageService_1.SceneStorageService.initializeDefaultScenes();
-        // 获取真实的场景和场景流程数量
+        sceneStorageService_1.SceneStorageService.initializeScenes();
+        MFRouteStorageService.initializeRoutes();
+        // 获取真实的场景、MF路线和物品数量
         var allScenes = sceneStorageService_1.SceneStorageService.getAllScenes();
-        var allSceneFlows = sceneStorageService_1.SceneStorageService.getAllSceneFlows();
+        var allMFRoutes = MFRouteStorageService.getAllRoutes();
         var allItems = ItemStorageService.getAllItems();
         this.setData({
-            sceneFlowsCount: allSceneFlows.length,
+            mfRoutesCount: allMFRoutes.length,
             scenesCount: allScenes.length,
             itemsCount: allItems.length
         });
     },
     /**
-     * 导航到场景流程管理
+     * 导航到MF路线管理
      */
     navigateToSceneFlows: function () {
         wx.navigateTo({

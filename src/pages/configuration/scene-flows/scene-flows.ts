@@ -2,23 +2,20 @@ import { SceneFlow } from '../../../models/scene-flow'
 
 interface SceneFlowsData {
   sceneFlows: SceneFlow[]
+  showRouteForm: boolean
+  editingRoute: SceneFlow | null
+  editMode: boolean
 }
 
-// Mock场景数据
-const mockScenes: { [key: string]: string } = {
-  'countess': '女伯爵',
-  'andariel': '安达利尔',
-  'summoner': '召唤者',
-  'nilathak': '尼拉塞克',
-  'mephisto': '墨菲斯托',
-  'diablo': '迪亚波罗',
-  'baal': '巴尔',
-  'pindleskin': 'P叔'
-}
+var SceneStorageService = require('../../../services/sceneStorageService');
+var MFRouteStorageService = require('../../../services/mfRouteStorageService');
 
 Page({
   data: {
-    sceneFlows: []
+    sceneFlows: [],
+    showRouteForm: false,
+    editingRoute: null,
+    editMode: false
   } as SceneFlowsData,
 
   onLoad() {
@@ -26,64 +23,65 @@ Page({
   },
 
   /**
-   * 加载场景流程数据
+   * 加载MF路线数据
    */
   loadSceneFlows() {
-    // Mock数据
-    const mockSceneFlows: SceneFlow[] = [
-      {
-        id: '1',
-        name: 'Key Run',
-        sceneIds: ['countess', 'summoner', 'nilathak'],
-        sceneCount: 3,
-        isBuiltIn: true,
-        usageCount: 0,
-        createTime: Date.now() - 7 * 24 * 60 * 60 * 1000,
-        updateTime: Date.now() - 2 * 24 * 60 * 60 * 1000
-      },
-      {
-        id: '2',
-        name: 'KM (仅墨菲斯托)',
-        sceneIds: ['mephisto'],
-        sceneCount: 1,
-        isBuiltIn: true,
-        usageCount: 0,
-        createTime: Date.now() - 7 * 24 * 60 * 60 * 1000,
-        updateTime: Date.now() - 3 * 24 * 60 * 60 * 1000
-      },
-      {
-        id: '3',
-        name: '85场景全刷',
-        sceneIds: ['countess', 'andariel', 'summoner', 'nilathak', 'mephisto', 'diablo', 'baal'],
-        sceneCount: 7,
-        isBuiltIn: false,
-        usageCount: 0,
-        createTime: Date.now() - 5 * 24 * 60 * 60 * 1000,
-        updateTime: Date.now() - 1 * 24 * 60 * 60 * 1000
-      }
-    ]
+    try {
+      // 从MF路线存储服务获取数据
+      var routes = MFRouteStorageService.getAllRoutes();
 
-    // 添加场景预览和时间格式化
-    const processedSceneFlows = mockSceneFlows.map(flow => {
-      let scenesPreview = ''
-      if (flow.id === '1') {
-        scenesPreview = '女伯爵 → 召唤者 → 尼拉塞克'
-      } else if (flow.id === '2') {
-        scenesPreview = '墨菲斯托'
-      } else if (flow.id === '3') {
-        scenesPreview = '女伯爵 → 安达利尔 → 召唤者 → 尼拉塞克 → 墨菲斯托 → 迪亚波罗 → 巴尔'
+      // 为每个路线添加场景预览信息
+      var processedRoutes = [];
+      for (var i = 0; i < routes.length; i++) {
+        var route = routes[i];
+        var scenesPreview = this.generateScenesPreview(route.sceneIds);
+
+        processedRoutes.push({
+          ...route,
+          scenesPreview: scenesPreview,
+          updateTimeText: this.formatTime(route.updateTime),
+          sceneCount: route.sceneIds.length
+        });
       }
 
-      return {
-        ...flow,
-        scenesPreview: scenesPreview,
-        updateTimeText: this.formatTime(flow.updateTime)
-      }
-    })
+      this.setData({
+        sceneFlows: processedRoutes
+      });
+    } catch (error) {
+      console.error('加载MF路线失败:', error);
+      this.setData({
+        sceneFlows: []
+      });
+    }
+  },
 
-    this.setData({
-      sceneFlows: processedSceneFlows
-    })
+  /**
+   * 生成场景预览文本
+   * @param sceneIds 场景ID数组
+   * @returns 场景预览文本
+   */
+  generateScenesPreview(sceneIds: string[]): string {
+    try {
+      if (!sceneIds || sceneIds.length === 0) {
+        return '无场景';
+      }
+
+      var sceneNames = [];
+      for (var i = 0; i < sceneIds.length; i++) {
+        var sceneId = sceneIds[i];
+        var scene = SceneStorageService.getSceneById(sceneId);
+        if (scene) {
+          sceneNames.push(scene.name);
+        } else {
+          sceneNames.push('[未知场景]');
+        }
+      }
+
+      return sceneNames.join(' → ');
+    } catch (error) {
+      console.error('生成场景预览失败:', error);
+      return '生成预览失败';
+    }
   },
 
   /**
@@ -112,44 +110,50 @@ Page({
   },
 
   /**
-   * 查看场景流程详情
+   * 查看MF路线详情
    */
   viewSceneFlow(e: any) {
     const item = e.currentTarget.dataset.item
-    wx.showToast({
-      title: `查看流程: ${item.name}`,
-      icon: 'none'
+    var sceneDetails = this.generateDetailedScenesPreview(item.sceneIds)
+
+    wx.showModal({
+      title: '路线详情',
+      content: `路线名称：${item.name}\n场景数量：${item.sceneIds.length}个\n使用次数：${item.usageCount}次\n\n场景顺序：\n${sceneDetails}`,
+      showCancel: false,
+      confirmText: '确定'
     })
   },
 
   /**
-   * 编辑场景流程
+   * 编辑MF路线
    */
   editSceneFlow(e: any) {
     const item = e.currentTarget.dataset.item
-    wx.showToast({
-      title: `编辑流程: ${item.name}`,
-      icon: 'none'
+
+    if (item.isBuiltIn) {
+      wx.showToast({
+        title: '内置路线不能编辑',
+        icon: 'none'
+      })
+      return
+    }
+
+    this.setData({
+      editingRoute: item,
+      editMode: true,
+      showRouteForm: true
     })
   },
 
   /**
-   * 删除场景流程
+   * 删除MF路线
    */
   deleteSceneFlow(e: any) {
     const item = e.currentTarget.dataset.item
-    // 使用ES5兼容的方式查找索引
-    var index = -1
-    for (var i = 0; i < this.data.sceneFlows.length; i++) {
-      if (this.data.sceneFlows[i].id === item.id) {
-        index = i
-        break
-      }
-    }
 
     if (item.isBuiltIn) {
       wx.showToast({
-        title: '内置流程不能删除',
+        title: '内置路线不能删除',
         icon: 'none'
       })
       return
@@ -157,35 +161,163 @@ Page({
 
     wx.showModal({
       title: '确认删除',
-      content: `确定要删除流程"${item.name}"吗？`,
+      content: `确定要删除路线"${item.name}"吗？此操作不可恢复。`,
       success: (res) => {
         if (res.confirm) {
-          const sceneFlows = this.data.sceneFlows
-          sceneFlows.splice(index, 1)
-          this.setData({
-            sceneFlows: sceneFlows
-          })
-
-          wx.showToast({
-            title: '删除成功',
-            icon: 'success'
-          })
+          // 使用MF路线存储服务删除
+          var success = MFRouteStorageService.deleteRoute(item.id);
+          if (success) {
+            this.loadSceneFlows(); // 重新加载数据
+          }
         }
       }
     })
   },
 
   /**
-   * 添加新场景流程
+   * 生成详细的场景预览文本
+   * @param sceneIds 场景ID数组
+   * @returns 详细场景预览文本
    */
-  addSceneFlow() {
-    wx.showToast({
-      title: '新增流程功能开发中',
-      icon: 'none'
+  generateDetailedScenesPreview(sceneIds: string[]): string {
+    try {
+      if (!sceneIds || sceneIds.length === 0) {
+        return '无场景';
+      }
+
+      var sceneLines = [];
+      for (var i = 0; i < sceneIds.length; i++) {
+        var sceneId = sceneIds[i];
+        var scene = SceneStorageService.getSceneById(sceneId);
+        if (scene) {
+          sceneLines.push((i + 1) + '. ' + scene.name);
+        } else {
+          sceneLines.push((i + 1) + '. [未知场景]');
+        }
+      }
+
+      return sceneLines.join('\n');
+    } catch (error) {
+      console.error('生成详细场景预览失败:', error);
+      return '生成预览失败';
+    }
+  },
+
+  /**
+   * 清理所有MF路线数据
+   */
+  clearTestData() {
+    wx.showModal({
+      title: '确认清理',
+      content: '确定要清理所有MF路线数据吗？此操作不可恢复！',
+      success: (res) => {
+        if (res.confirm) {
+          var success = MFRouteStorageService.clearAllRoutes();
+          if (success) {
+            wx.showToast({
+              title: '清理成功',
+              icon: 'success'
+            });
+            this.loadSceneFlows(); // 重新加载数据
+          }
+        }
+      }
     })
   },
 
-  
+  /**
+   * 添加新MF路线
+   */
+  addSceneFlow() {
+    console.log('🟢 新增路线按钮被点击');
+    console.log('🔍 当前状态:', {
+      showRouteForm: this.data.showRouteForm,
+      editMode: this.data.editMode,
+      editingRoute: this.data.editingRoute
+    });
+
+    this.setData({
+      editingRoute: null,
+      editMode: false,
+      showRouteForm: true
+    });
+
+    console.log('✅ 设置后的状态:', {
+      showRouteForm: this.data.showRouteForm,
+      editMode: this.data.editMode,
+      editingRoute: this.data.editingRoute
+    });
+  },
+
+  /**
+   * MF路线表单提交处理
+   */
+  onRouteFormSubmit(e: any) {
+    console.log('🎯 MF路线表单提交事件触发')
+    console.log('📥 事件详情:', e.detail)
+
+    var type = e.detail.type;
+    var route = e.detail.route;
+
+    console.log('🔍 操作类型:', type)
+    console.log('🛣️ 路线数据:', route)
+
+    if (type === 'create') {
+      // 创建新路线
+      console.log('➕ 开始创建新路线')
+      var success = MFRouteStorageService.createRoute(
+        route.name,
+        route.sceneIds,
+        route.description
+      );
+      console.log('📊 创建结果:', success)
+      if (success) {
+        console.log('✅ 路线创建成功，重新加载数据')
+        this.loadSceneFlows();
+      } else {
+        console.log('❌ 路线创建失败')
+      }
+    } else if (type === 'edit') {
+      // 更新现有路线
+      console.log('✏️ 开始更新路线')
+      var updates = {
+        name: route.name,
+        sceneIds: route.sceneIds,
+        description: route.description
+      };
+      var success = MFRouteStorageService.updateRoute(route.id, updates);
+      console.log('📊 更新结果:', success)
+      if (success) {
+        console.log('✅ 路线更新成功，重新加载数据')
+        this.loadSceneFlows();
+      } else {
+        console.log('❌ 路线更新失败')
+      }
+    }
+
+    console.log('🔚 关闭表单')
+    this.closeRouteForm();
+  },
+
+  /**
+   * MF路线表单取消处理
+   */
+  onRouteFormCancel() {
+    this.closeRouteForm();
+  },
+
+  /**
+   * 关闭路线表单
+   */
+  closeRouteForm() {
+    this.setData({
+      showRouteForm: false,
+      editingRoute: null,
+      editMode: false
+    })
+  },
+
+
   onShow() {
     this.loadSceneFlows()
   }

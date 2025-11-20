@@ -1,0 +1,97 @@
+<view class="modal-overlay" wx:if="{{visible}}" bindtap="onOverlayTap">
+  <view class="modal-content" catchtap="onContentTap">
+    <view class="modal-header">
+      <text class="modal-title">{{editMode ? '编辑MF路线' : '新建MF路线'}}</text>
+    </view>
+
+    <view class="modal-body">
+      <view class="form-item">
+        <text class="form-label">路线名称 *</text>
+        <input
+          class="form-input"
+          placeholder="请输入路线名称"
+          value="{{formData.name}}"
+          bindinput="onNameInput"
+          maxlength="50"
+        />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">路线描述</text>
+        <textarea
+          class="form-textarea"
+          placeholder="可选，描述路线特点或注意事项"
+          value="{{formData.description}}"
+          bindinput="onDescriptionInput"
+          maxlength="200"
+          auto-height
+        ></textarea>
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">场景选择 *</text>
+        <text class="form-hint">点击场景进行选择，自动按选择顺序排序</text>
+      </view>
+
+      <!-- 场景选择区域 -->
+      <view class="scene-selection-area">
+        <view class="scene-list">
+          <view
+            class="scene-item {{item.selected ? 'selected' : ''}}"
+            wx:for="{{availableScenes}}"
+            wx:key="id"
+            data-scene-id="{{item.id}}"
+            bindtap="onSceneTap"
+          >
+            <view class="scene-info">
+              <text class="scene-name">{{item.name}}</text>
+              <text class="scene-description" wx:if="{{item.description}}">{{item.description}}</text>
+            </view>
+            <view class="scene-order" wx:if="{{item.selected}}">
+              <text class="order-number">{{item.order}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 已选择场景序列 -->
+      <view class="selected-scenes-sequence" wx:if="{{formData.sceneIds.length > 0}}">
+        <view class="sequence-header">
+          <text class="sequence-title">场景序列（{{formData.sceneIds.length}}个）</text>
+        </view>
+        <view class="sequence-list">
+          <view
+            class="sequence-item"
+            wx:for="{{formData.sceneNames}}"
+            wx:key="*this"
+          >
+            <view class="sequence-number">{{index + 1}}</view>
+            <text class="sequence-name">{{item}}</text>
+            <view class="sequence-controls">
+              <button
+                class="control-btn up-btn {{index === 0 ? 'disabled' : ''}}"
+                data-scene-id="{{formData.sceneIds[index]}}"
+                bindtap="moveSceneUp"
+                disabled="{{index === 0}}"
+              >↑</button>
+              <button
+                class="control-btn down-btn {{index === formData.sceneIds.length - 1 ? 'disabled' : ''}}"
+                data-scene-id="{{formData.sceneIds[index]}}"
+                bindtap="moveSceneDown"
+                disabled="{{index === formData.sceneIds.length - 1}}"
+              >↓</button>
+            </view>
+            <text class="sequence-arrow" wx:if="{{index < formData.sceneNames.length - 1}}">→</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="modal-footer">
+      <button class="btn btn-cancel" catchtap="onCancel">取消</button>
+      <button class="btn btn-submit" catchtap="onSubmit">
+        {{editMode ? '保存' : '创建'}}
+      </button>
+    </view>
+  </view>
+</view>

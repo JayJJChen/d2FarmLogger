@@ -1,5 +1,8 @@
 {
   "navigationBarTitleText": "MF路线管理",
   "backgroundColor": "#f8f9fa",
-  "backgroundTextStyle": "dark"
+  "backgroundTextStyle": "dark",
+  "usingComponents": {
+    "mf-route-form": "../../../components/mf-route-form/mf-route-form"
+  }
 }

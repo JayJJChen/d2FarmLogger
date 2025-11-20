@@ -11,7 +11,9 @@
       "Bash(findstr:*)",
       "Bash(npm run type-check:*)",
       "Bash(npm run build:*)",
-      "Bash(\"C:\\Program Files (x86)\\Tencent\\微信web开发者工具\\cli.bat\" islogin)"
+      "Bash(\"C:\\Program Files (x86)\\Tencent\\微信web开发者工具\\cli.bat\" islogin)",
+      "Bash(tree:*)",
+      "Bash(npm run deploy:*)"
     ],
     "deny": [],
     "ask": []
