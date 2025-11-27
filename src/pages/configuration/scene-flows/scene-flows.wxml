@@ -11,7 +11,7 @@
       wx:for="{{sceneFlows}}"
       wx:key="id"
       class="scene-flow-item"
-      bindtap="viewSceneFlow"
+      bindtap="onItemClick"
       data-item="{{item}}"
     >
       <!-- 流程内容 -->

@@ -47,19 +47,8 @@ Page({
     },
     onCharacterConfig: function (e) {
         var character = e.detail.character;
-        wx.showModal({
-            title: '配置场景',
-            content: character.name + ' 还没有配置默认场景列表，请先去设置页面设置MF路线。',
-            showCancel: true,
-            cancelText: '取消',
-            confirmText: '去配置',
-            success: function (res) {
-                if (res.confirm) {
-                    wx.switchTab({
-                        url: '/pages/configuration/configuration'
-                    });
-                }
-            }
+        wx.navigateTo({
+            url: '/pages/configuration/scene-flows/scene-flows?selectMode=true&characterId=' + character.id
         });
     },
     onCharacterStartSession: function (e) {
