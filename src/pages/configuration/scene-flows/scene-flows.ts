@@ -7,8 +7,9 @@ interface SceneFlowsData {
   editMode: boolean
 }
 
-var SceneStorageService = require('../../../services/sceneStorageService');
-var MFRouteStorageService = require('../../../services/mfRouteStorageService');
+var { SceneStorageService } = require('../../../services/sceneStorageService');
+var { MFRouteStorageService } = require('../../../services/mfRouteStorageService');
+var StorageUtils = require('../../../utils/storageUtils');
 
 Page({
   data: {
@@ -36,12 +37,12 @@ Page({
         var route = routes[i];
         var scenesPreview = this.generateScenesPreview(route.sceneIds);
 
-        processedRoutes.push({
-          ...route,
-          scenesPreview: scenesPreview,
-          updateTimeText: this.formatTime(route.updateTime),
-          sceneCount: route.sceneIds.length
-        });
+        var processedRoute = StorageUtils.extendObject({}, route);
+        processedRoute.scenesPreview = scenesPreview;
+        processedRoute.updateTimeText = this.formatTime(route.updateTime);
+        processedRoute.sceneCount = route.sceneIds.length;
+
+        processedRoutes.push(processedRoute);
       }
 
       this.setData({
@@ -118,7 +119,7 @@ Page({
 
     wx.showModal({
       title: '路线详情',
-      content: `路线名称：${item.name}\n场景数量：${item.sceneIds.length}个\n使用次数：${item.usageCount}次\n\n场景顺序：\n${sceneDetails}`,
+      content: '路线名称：' + item.name + '\n场景数量：' + item.sceneIds.length + '个\n使用次数：' + item.usageCount + '次\n\n场景顺序：\n' + sceneDetails,
       showCancel: false,
       confirmText: '确定'
     })
@@ -161,7 +162,7 @@ Page({
 
     wx.showModal({
       title: '确认删除',
-      content: `确定要删除路线"${item.name}"吗？此操作不可恢复。`,
+      content: '确定要删除路线"' + item.name + '"吗？此操作不可恢复。',
       success: (res) => {
         if (res.confirm) {
           // 使用MF路线存储服务删除
@@ -201,28 +202,6 @@ Page({
       console.error('生成详细场景预览失败:', error);
       return '生成预览失败';
     }
-  },
-
-  /**
-   * 清理所有MF路线数据
-   */
-  clearTestData() {
-    wx.showModal({
-      title: '确认清理',
-      content: '确定要清理所有MF路线数据吗？此操作不可恢复！',
-      success: (res) => {
-        if (res.confirm) {
-          var success = MFRouteStorageService.clearAllRoutes();
-          if (success) {
-            wx.showToast({
-              title: '清理成功',
-              icon: 'success'
-            });
-            this.loadSceneFlows(); // 重新加载数据
-          }
-        }
-      }
-    })
   },
 
   /**
