@@ -100,7 +100,7 @@ Page({
     }
 
     wx.navigateTo({
-      url: '/pages/sessions/session?characterId=' + character.id
+      url: '/pages/sessions/start/start?characterId=' + character.id
     })
   },
 

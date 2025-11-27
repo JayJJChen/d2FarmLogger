@@ -1,0 +1,145 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background: #fff;
+  width: 90%;
+  max-width: 600rpx;
+  max-height: 80vh;
+  border-radius: 16rpx;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.header {
+  padding: 24rpx;
+  border-bottom: 1rpx solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .back-btn, .close-btn {
+    font-size: 36rpx;
+    padding: 0 16rpx;
+    color: #666;
+  }
+
+  .title {
+    font-size: 32rpx;
+    font-weight: 600;
+  }
+}
+
+.content {
+  padding: 24rpx;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.step-title {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 24rpx;
+  text-align: center;
+}
+
+.grid-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  justify-content: center;
+
+  &.two-columns .grid-item {
+     width: 45%;
+  }
+}
+
+.grid-item {
+  padding: 20rpx;
+  background: #f5f5f5;
+  border-radius: 8rpx;
+  text-align: center;
+  font-size: 28rpx;
+
+  &.category-item {
+      background: #fff;
+      border: 2rpx solid #eee;
+      font-weight: bold;
+  }
+}
+
+.items-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  justify-content: center;
+}
+
+.item-btn {
+  padding: 12rpx 20rpx;
+  background: #f0f0f0;
+  border-radius: 6rpx;
+  font-size: 26rpx;
+  margin-bottom: 12rpx;
+}
+
+.user-item-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.name-input {
+  border: 1rpx solid #ddd;
+  padding: 16rpx;
+  border-radius: 8rpx;
+  font-size: 30rpx;
+}
+
+.suggestions-list {
+  max-height: 300rpx;
+  border: 1rpx solid #eee;
+  border-radius: 8rpx;
+}
+
+.suggestion-item {
+  padding: 16rpx;
+  border-bottom: 1rpx solid #f9f9f9;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.note-input {
+  border: 1rpx solid #ddd;
+  padding: 16rpx;
+  border-radius: 8rpx;
+  height: 120rpx;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 28rpx;
+}
+
+.confirm-btn {
+  background: #4CAF50;
+  color: #fff;
+  width: 100%;
+  font-size: 30rpx;
+}
+
+.new-item-tip {
+    font-size: 24rpx;
+    color: #999;
+}
