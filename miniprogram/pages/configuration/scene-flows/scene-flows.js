@@ -1,18 +1,8 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var SceneStorageService = require('../../../services/sceneStorageService');
-var MFRouteStorageService = require('../../../services/mfRouteStorageService');
+var SceneStorageService = require('../../../services/sceneStorageService').SceneStorageService;
+var MFRouteStorageService = require('../../../services/mfRouteStorageService').MFRouteStorageService;
+var StorageUtils = require('../../../utils/storageUtils');
 Page({
     data: {
         sceneFlows: [],
@@ -35,7 +25,11 @@ Page({
             for (var i = 0; i < routes.length; i++) {
                 var route = routes[i];
                 var scenesPreview = this.generateScenesPreview(route.sceneIds);
-                processedRoutes.push(__assign(__assign({}, route), { scenesPreview: scenesPreview, updateTimeText: this.formatTime(route.updateTime), sceneCount: route.sceneIds.length }));
+                var processedRoute = StorageUtils.extendObject({}, route);
+                processedRoute.scenesPreview = scenesPreview;
+                processedRoute.updateTimeText = this.formatTime(route.updateTime);
+                processedRoute.sceneCount = route.sceneIds.length;
+                processedRoutes.push(processedRoute);
             }
             this.setData({
                 sceneFlows: processedRoutes
@@ -110,7 +104,7 @@ Page({
         var sceneDetails = this.generateDetailedScenesPreview(item.sceneIds);
         wx.showModal({
             title: '路线详情',
-            content: "\u8DEF\u7EBF\u540D\u79F0\uFF1A".concat(item.name, "\n\u573A\u666F\u6570\u91CF\uFF1A").concat(item.sceneIds.length, "\u4E2A\n\u4F7F\u7528\u6B21\u6570\uFF1A").concat(item.usageCount, "\u6B21\n\n\u573A\u666F\u987A\u5E8F\uFF1A\n").concat(sceneDetails),
+            content: '路线名称：' + item.name + '\n场景数量：' + item.sceneIds.length + '个\n使用次数：' + item.usageCount + '次\n\n场景顺序：\n' + sceneDetails,
             showCancel: false,
             confirmText: '确定'
         });
@@ -148,7 +142,7 @@ Page({
         }
         wx.showModal({
             title: '确认删除',
-            content: "\u786E\u5B9A\u8981\u5220\u9664\u8DEF\u7EBF\"".concat(item.name, "\"\u5417\uFF1F\u6B64\u64CD\u4F5C\u4E0D\u53EF\u6062\u590D\u3002"),
+            content: '确定要删除路线"' + item.name + '"吗？此操作不可恢复。',
             success: function (res) {
                 if (res.confirm) {
                     // 使用MF路线存储服务删除
