@@ -49,11 +49,6 @@
     <text class="empty-tip">创建你的第一个MF路线</text>
   </view>
 
-  <!-- 临时清理按钮 -->
-  <view class="clear-button" bindtap="clearTestData" wx:if="{{sceneFlows.length > 0}}">
-    <text class="clear-text">清理测试数据</text>
-  </view>
-
   <!-- 添加按钮 -->
   <view class="add-button" bindtap="addSceneFlow">
     <text class="add-icon">+</text>
