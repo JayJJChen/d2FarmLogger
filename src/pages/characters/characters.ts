@@ -79,8 +79,8 @@ Page({
         confirmText: '去配置',
         success: (res) => {
           if (res.confirm) {
-            wx.switchTab({
-              url: '/pages/configuration/configuration'
+            wx.navigateTo({
+              url: '/pages/configuration/scene-flows/scene-flows?selectMode=true&characterId=' + character.id
             })
           }
         }
