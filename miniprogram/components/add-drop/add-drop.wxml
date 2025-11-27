@@ -1,0 +1,87 @@
+<view class="overlay">
+  <view class="modal">
+    <view class="header">
+      <view class="back-btn" bindtap="onBack" wx:if="{{step > 1}}">←</view>
+      <view class="title">添加掉落</view>
+      <view class="close-btn" bindtap="onCancel">×</view>
+    </view>
+
+    <view class="content">
+      <!-- Step 1: Select Scene -->
+      <view wx:if="{{step === 1}}" class="step-container">
+        <view class="step-title">选择场景</view>
+        <view class="grid-container">
+          <view class="grid-item"
+                wx:for="{{session.sceneSnapshots}}"
+                wx:key="id"
+                data-id="{{item.id}}"
+                bindtap="onSceneSelect">
+            {{item.name}}
+          </view>
+        </view>
+      </view>
+
+      <!-- Step 2: Select Category -->
+      <view wx:if="{{step === 2}}" class="step-container">
+        <view class="step-title">选择分类</view>
+        <view class="grid-container two-columns">
+          <view class="grid-item category-item"
+                wx:for="{{categories}}"
+                wx:key="key"
+                data-key="{{item.key}}"
+                bindtap="onCategorySelect"
+                style="color: {{item.color}}; border-color: {{item.color}}">
+            {{item.name}}
+          </view>
+        </view>
+      </view>
+
+      <!-- Step 3: Select Item -->
+      <view wx:if="{{step === 3}}" class="step-container">
+        <view class="step-title" style="color: {{selectedCategory.color}}">{{selectedCategory.name}}</view>
+
+        <!-- Built-in Items Grid -->
+        <view wx:if="{{selectedCategory.key === 'rune' || selectedCategory.key === 'key' || selectedCategory.key === 'essence'}}" class="items-grid">
+           <view class="item-btn"
+                 wx:for="{{builtInItems}}"
+                 wx:key="id"
+                 data-item="{{item}}"
+                 bindtap="onBuiltInItemSelect">
+             {{item.name}}
+           </view>
+        </view>
+
+        <!-- User Items / Input -->
+        <view wx:else class="user-item-form">
+          <input class="name-input"
+                 placeholder="物品名称"
+                 value="{{searchText}}"
+                 bindinput="onSearchInput"
+                 focus="{{true}}" />
+
+          <!-- Suggestions -->
+          <scroll-view scroll-y class="suggestions-list" wx:if="{{userItems.length > 0}}">
+            <view class="suggestion-item"
+                  wx:for="{{userItems}}"
+                  wx:key="id"
+                  data-item="{{item}}"
+                  bindtap="onUserItemSelect">
+              {{item.name}}
+            </view>
+          </scroll-view>
+
+          <view class="new-item-tip" wx:if="{{searchText && userItems.length === 0}}">
+            将保存为新物品: {{searchText}}
+          </view>
+
+          <textarea class="note-input"
+                    placeholder="备注 (可选)"
+                    value="{{note}}"
+                    bindinput="onNoteInput"></textarea>
+
+          <button class="confirm-btn" bindtap="onSaveNewItem" wx:if="{{searchText && userItems.length === 0}}">保存掉落</button>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

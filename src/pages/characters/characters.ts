@@ -62,19 +62,8 @@ Page({
 
   onCharacterConfig(e: any) {
     const { character } = e.detail
-    wx.showModal({
-      title: '配置场景',
-      content: character.name + ' 还没有配置默认场景列表，请先去设置页面设置MF路线。',
-      showCancel: true,
-      cancelText: '取消',
-      confirmText: '去配置',
-      success: (res) => {
-        if (res.confirm) {
-          wx.switchTab({
-            url: '/pages/configuration/configuration'
-          })
-        }
-      }
+    wx.navigateTo({
+        url: '/pages/configuration/scene-flows/scene-flows?selectMode=true&characterId=' + character.id
     })
   },
 
@@ -90,8 +79,8 @@ Page({
         confirmText: '去配置',
         success: (res) => {
           if (res.confirm) {
-            wx.switchTab({
-              url: '/pages/configuration/configuration'
+            wx.navigateTo({
+              url: '/pages/configuration/scene-flows/scene-flows?selectMode=true&characterId=' + character.id
             })
           }
         }
@@ -100,7 +89,7 @@ Page({
     }
 
     wx.navigateTo({
-      url: '/pages/sessions/session?characterId=' + character.id
+      url: '/pages/sessions/start/start?characterId=' + character.id
     })
   },
 

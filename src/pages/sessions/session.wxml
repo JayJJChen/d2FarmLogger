@@ -1,3 +1,44 @@
-<view class="container">
-  <text class="page-title">MF Session页面</text>
+<view class="container" wx:if="{{session}}">
+  <view class="status-bar">
+    <view class="char-info">
+      <text class="char-name">{{session.characterSnapshot.name}}</text>
+      <text class="char-detail">Lv.{{session.characterSnapshot.level}} {{session.characterSnapshot.class}} MF:{{session.characterSnapshot.magicFind}}</text>
+    </view>
+    <view class="scenes-info">
+      <text class="label">场景: </text>
+      <text wx:for="{{session.sceneSnapshots}}" wx:key="id" class="scene-name">{{item.name}} </text>
+    </view>
+    <view class="timer-info">
+       <text class="time">{{formattedDuration}}</text>
+       <text class="target">{{targetProgress}}</text>
+    </view>
+  </view>
+
+  <view class="main-actions">
+    <button class="action-btn drop-btn" bindtap="onAddDrop">+ 添加掉落</button>
+    <button class="action-btn next-btn" bindtap="onNextRun">▷ Next Run</button>
+  </view>
+
+  <view class="drops-list">
+    <view class="list-header">本次掉落 ({{session.drops.length}})</view>
+    <scroll-view scroll-y class="list-content">
+      <view class="drop-item" wx:for="{{session.drops}}" wx:key="id">
+        <view class="drop-name" style="color: {{item.itemCategory.color}}">{{item.itemName}}</view>
+        <view class="drop-detail">
+           <text class="drop-scene">@{{item.sceneName}}</text>
+           <text wx:if="{{item.note}}" class="drop-note"> - {{item.note}}</text>
+        </view>
+      </view>
+      <view wx:if="{{session.drops.length === 0}}" class="empty-drops">暂无掉落记录</view>
+    </scroll-view>
+  </view>
+
+  <view class="control-bar">
+    <button class="control-btn pause-btn" bindtap="onTogglePause">
+      {{session.status === 'active' ? '|| 暂停' : '▷ 继续'}}
+    </button>
+    <button class="control-btn end-btn" bindtap="onEndSession">■ 结束Session</button>
+  </view>
+
+  <add-drop wx:if="{{showAddDrop}}" session="{{session}}" bind:dropadded="onDropAdded" bind:cancel="onCancelDrop"></add-drop>
 </view>

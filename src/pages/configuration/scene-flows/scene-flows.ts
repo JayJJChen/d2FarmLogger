@@ -5,10 +5,13 @@ interface SceneFlowsData {
   showRouteForm: boolean
   editingRoute: SceneFlow | null
   editMode: boolean
+  selectMode: boolean
+  characterId: string
 }
 
 var { SceneStorageService } = require('../../../services/sceneStorageService');
 var { MFRouteStorageService } = require('../../../services/mfRouteStorageService');
+var { CharacterStorageService } = require('../../../services/characterStorageService');
 var StorageUtils = require('../../../utils/storageUtils');
 
 Page({
@@ -16,10 +19,19 @@ Page({
     sceneFlows: [],
     showRouteForm: false,
     editingRoute: null,
-    editMode: false
+    editMode: false,
+    selectMode: false,
+    characterId: ''
   } as SceneFlowsData,
 
-  onLoad() {
+  onLoad(options: any) {
+    if (options && options.selectMode) {
+        this.setData({
+            selectMode: true,
+            characterId: options.characterId
+        })
+        wx.setNavigationBarTitle({ title: '选择MF路线' })
+    }
     this.loadSceneFlows()
   },
 
@@ -107,6 +119,45 @@ Page({
     } else {
       const date = new Date(timestamp)
       return (date.getMonth() + 1) + '月' + date.getDate() + '日'
+    }
+  },
+
+  onItemClick(e: any) {
+      if (this.data.selectMode) {
+          this.selectSceneFlow(e)
+      } else {
+          this.viewSceneFlow(e)
+      }
+  },
+
+  selectSceneFlow(e: any) {
+    var item = e.currentTarget.dataset.item
+    var characterId = this.data.characterId
+
+    // Get Character
+    var characters = CharacterStorageService.getAllCharacters()
+    var character = null
+    for (var i=0; i<characters.length; i++) {
+        if (characters[i].id === characterId) {
+            character = characters[i]
+            break
+        }
+    }
+
+    if (character) {
+        // Update character defaultSceneIds
+        character.defaultSceneIds = item.sceneIds
+        var success = CharacterStorageService.updateCharacter(character)
+        if (success) {
+            wx.showToast({ title: '配置成功' })
+            setTimeout(function() {
+                wx.navigateBack()
+            }, 1000)
+        } else {
+             wx.showToast({ title: '配置失败', icon: 'none' })
+        }
+    } else {
+        wx.showToast({ title: '角色未找到', icon: 'none' })
     }
   },
 
@@ -208,23 +259,10 @@ Page({
    * 添加新MF路线
    */
   addSceneFlow() {
-    console.log('🟢 新增路线按钮被点击');
-    console.log('🔍 当前状态:', {
-      showRouteForm: this.data.showRouteForm,
-      editMode: this.data.editMode,
-      editingRoute: this.data.editingRoute
-    });
-
     this.setData({
       editingRoute: null,
       editMode: false,
       showRouteForm: true
-    });
-
-    console.log('✅ 设置后的状态:', {
-      showRouteForm: this.data.showRouteForm,
-      editMode: this.data.editMode,
-      editingRoute: this.data.editingRoute
     });
   },
 
@@ -232,49 +270,30 @@ Page({
    * MF路线表单提交处理
    */
   onRouteFormSubmit(e: any) {
-    console.log('🎯 MF路线表单提交事件触发')
-    console.log('📥 事件详情:', e.detail)
-
     var type = e.detail.type;
     var route = e.detail.route;
 
-    console.log('🔍 操作类型:', type)
-    console.log('🛣️ 路线数据:', route)
-
     if (type === 'create') {
-      // 创建新路线
-      console.log('➕ 开始创建新路线')
       var success = MFRouteStorageService.createRoute(
         route.name,
         route.sceneIds,
         route.description
       );
-      console.log('📊 创建结果:', success)
       if (success) {
-        console.log('✅ 路线创建成功，重新加载数据')
         this.loadSceneFlows();
-      } else {
-        console.log('❌ 路线创建失败')
       }
     } else if (type === 'edit') {
-      // 更新现有路线
-      console.log('✏️ 开始更新路线')
       var updates = {
         name: route.name,
         sceneIds: route.sceneIds,
         description: route.description
       };
       var success = MFRouteStorageService.updateRoute(route.id, updates);
-      console.log('📊 更新结果:', success)
       if (success) {
-        console.log('✅ 路线更新成功，重新加载数据')
         this.loadSceneFlows();
-      } else {
-        console.log('❌ 路线更新失败')
       }
     }
 
-    console.log('🔚 关闭表单')
     this.closeRouteForm();
   },
 

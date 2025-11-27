@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "MF Session"
+  "navigationBarTitleText": "Session 进行中",
+  "usingComponents": {
+    "add-drop": "../../components/add-drop/add-drop"
+  }
 }
