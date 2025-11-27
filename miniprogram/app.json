@@ -2,6 +2,7 @@
   "pages": [
     "pages/characters/characters",
     "pages/sessions/session",
+    "pages/sessions/start/start",
     "pages/statistics/statistics",
     "pages/configuration/configuration",
     "pages/configuration/scene-flows/scene-flows",

@@ -1,0 +1,41 @@
+<view class="container">
+  <view class="section">
+    <view class="section-title">人物</view>
+    <view class="character-info" wx:if="{{character}}">
+      <text class="name">{{character.name}}</text>
+      <text class="class">{{character.class}}</text>
+      <text class="level" wx:if="{{character.level}}">Lv.{{character.level}}</text>
+      <text class="mf" wx:if="{{character.magicFind}}">MF: {{character.magicFind}}</text>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">选择场景</view>
+    <checkbox-group bindchange="onSceneChange">
+      <label class="scene-item" wx:for="{{scenes}}" wx:key="id">
+        <checkbox value="{{item.id}}" checked="{{item.checked}}" />
+        <text>{{item.name}}</text>
+      </label>
+    </checkbox-group>
+    <view wx:if="{{scenes.length === 0}}" class="empty-tip">暂无场景，请先去设置页面添加。</view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">目标</view>
+    <radio-group bindchange="onTargetTypeChange" class="target-group">
+      <label class="target-item" wx:for="{{targetTypes}}" wx:key="value">
+        <radio value="{{item.value}}" checked="{{targetType === item.value}}" />
+        <text>{{item.name}}</text>
+      </label>
+    </radio-group>
+
+    <view class="target-input-container" wx:if="{{targetType !== 'none'}}">
+      <input type="number" placeholder="请输入数值" bindinput="onTargetValueInput" value="{{targetValue}}" />
+      <text>{{targetType === 'count' ? '次' : '分钟'}}</text>
+    </view>
+  </view>
+
+  <view class="footer">
+    <button class="start-btn" bindtap="onStart">开始 Session</button>
+  </view>
+</view>

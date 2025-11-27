@@ -62,8 +62,8 @@ Page({
                 confirmText: '去配置',
                 success: function (res) {
                     if (res.confirm) {
-                        wx.switchTab({
-                            url: '/pages/configuration/configuration'
+                        wx.navigateTo({
+                            url: '/pages/configuration/scene-flows/scene-flows?selectMode=true&characterId=' + character.id
                         });
                     }
                 }
